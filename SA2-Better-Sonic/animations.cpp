@@ -976,6 +976,9 @@ AnimationInfo MetalSonicAnimationListR[] = {
 
 void Init_NewAnimation() {
 
-	WriteData((AnimationInfo**)0x716F0A, SonicAnimationListR);
-	WriteData((AnimationInfo**)0x7171C1, AmyAnimationListR);
+	if (sonicBall)
+		WriteData((AnimationInfo**)0x716F0A, SonicAnimationListR);
+
+	if (amyBall)
+		WriteData((AnimationInfo**)0x7171C1, AmyAnimationListR);
 }

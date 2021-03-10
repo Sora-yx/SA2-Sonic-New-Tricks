@@ -8,6 +8,8 @@ Trampoline* PrisonLaneDoor_t;
 Trampoline* PrisonLaneDoor4_t;
 Trampoline* DoorIG_t;
 Trampoline* DoorIG2_t;
+Trampoline* MetalBox_t;
+Trampoline* MetalBoxGravity_t;
 
 bool isSpeedCharacter() {
 	if (MainCharObj2[0]->CharID == Characters_Sonic || MainCharObj2[0]->CharID == Characters_Shadow || MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
@@ -152,6 +154,41 @@ void doorIG2_r(ObjectMaster* obj) {
 	origin(obj);
 }
 
+void MetalBox_r(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (GetCollidingPlayer(obj) && isSonicAttacking() && data->NextAction < 1)
+	{
+		data->Collision->CollisionArray->push |= 0x4000u;
+		data->field_6 = 1;
+		AddScore(20);
+		Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
+		data->NextAction = 1;
+	}
+
+	ObjectFunc(origin, MetalBox_t->Target());
+	origin(obj);
+}
+
+
+void MetalBoxGravity_r(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (GetCollidingPlayer(obj) && isSonicAttacking() && data->NextAction < 1)
+	{
+		data->Collision->CollisionArray->push |= 0x4000u;
+		data->field_6 = 1;
+		AddScore(20);
+		Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
+		data->NextAction = 1;
+	}
+
+	ObjectFunc(origin, MetalBoxGravity_t->Target());
+	origin(obj);
+}
+
 
 static const void* const DrawChunkModelPtr = (void*)0x42E6C0;
 static inline void DrawChunkModelASM(NJS_CNK_MODEL* a1)
@@ -205,12 +242,28 @@ static void __declspec(naked) DrawChunkModel()
 	}
 }
 
+double SA1dashspeed = 0.9; //0.40000001;
+double* SA1dashspeedptr = &SA1dashspeed;
 
-void Init_BetterSonic() {
+float bounceSpeed = 3.9000001;
+float bounceSpeed2 = 4.5999999;
 
-	WriteData<2>((int*)0x723E19, 0x90); //remove spin dash delay
+float* bouncespeedPtr = &bounceSpeed;
+float* bouncespeed2Ptr = &bounceSpeed2;
 
-	Init_NewAnimation();
+
+void Init_Helper() {
+
+	if (sa1dash) {
+		WriteData<2>((int*)0x723E19, 0x90); //remove spin dash delay
+		WriteData((double**)0x725227, SA1dashspeedptr); //increase spin dash speed
+	}
+
+	if (superBounce)
+	{
+		WriteData((float**)0x71b0da, bouncespeedPtr);
+		WriteData((float**)0x71b0f6, bouncespeed2Ptr);
+	}
 
 	CheckBreakObject_t = new Trampoline((int)CheckBreakObject, (int)CheckBreakObject + 0x7, CheckBreakObject_r);
 	Dynamite_t = new Trampoline((int)Dynamite_Main, (int)Dynamite_Main + 0x5, CheckBreakDynamite);
@@ -222,19 +275,26 @@ void Init_BetterSonic() {
 	DoorIG_t = new Trampoline((int)DoorIG, (int)DoorIG + 0x6, doorIG_r);
 	DoorIG2_t = new Trampoline((int)DoorIG2, (int)DoorIG2 + 0x6, doorIG2_r);
 
+	MetalBox_t = new Trampoline((int)MetalBox, (int)MetalBox + 0x6, MetalBox_r);
+	MetalBoxGravity_t = new Trampoline((int)MetalBoxGravity, (int)MetalBoxGravity + 0x6, MetalBoxGravity_r);
 
-	//Remove upgrade display when ball form
-	WriteCall((void*)0x72080B, DrawChunkModel);	
-	WriteCall((void*)0x72086C, DrawChunkModel);	
-	WriteCall((void*)0x7208F1, DrawChunkModel);	
-	WriteCall((void*)0x720991, DrawChunkModel);
+	WriteData<5>((int*)0x6cdf58, 0x90); //remove speed nerf when destroying boxes	
+	WriteData<5>((int*)0x6D6B99, 0x90);
+	WriteData<5>((int*)0x77BFFB, 0x90);
 
-	//This makes the game crash when playing Costum Character... will have to dig that eventually.
-	/*WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
-	WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
-	WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
-	WriteCall((void*)0x720A59, FixUpgradeDisplay2);
-	WriteCall((void*)0x720AA6, FixUpgradeDisplay2);*/
+	if (sonicBall) {
+		//Remove upgrade display when ball form
+		WriteCall((void*)0x72080B, DrawChunkModel);
+		WriteCall((void*)0x72086C, DrawChunkModel);
+		WriteCall((void*)0x7208F1, DrawChunkModel);
+		WriteCall((void*)0x720991, DrawChunkModel);
 
-	WriteData<5>((int*)0x71AF71, 0x90); //remove amy grunt homing attack
+		WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
+		WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
+		WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
+
+		WriteCall((void*)0x720A59, FixUpgradeDisplay2);
+
+		WriteData<5>((int*)0x7185b5, 0x90); //remove the blue aura when jumping
+	}
 }
