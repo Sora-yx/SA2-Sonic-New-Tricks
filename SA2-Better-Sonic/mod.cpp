@@ -6,7 +6,13 @@ extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 
+		Init_StartEndPos();
+		Init_BetterSonic();
 
+		/*StoryEntry* story = (StoryEntry*)0x173A5E0;
+		story->Type = 1;
+		story->Level = LevelIDs_MetalHarbor;
+		story->Character = Characters_Amy;*/
 
 	}
 
@@ -19,8 +25,6 @@ extern "C" {
 		{
 
 		}
-
-
 	}
 
 
