@@ -30,6 +30,9 @@
     <ClCompile Include="sonic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="animations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

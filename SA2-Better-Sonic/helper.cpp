@@ -1,218 +1,156 @@
 #include "stdafx.h"
 
+Trampoline* CheckBreakObject_t;
+Trampoline* Dynamite_t;
+Trampoline* DynamiteHiddenBase_t;
+Trampoline* DynamiteSandOcean_t;
+Trampoline* PrisonLaneDoor_t;
+Trampoline* PrisonLaneDoor4_t;
+Trampoline* DoorIG_t;
+Trampoline* DoorIG2_t;
 
-AnimationInfo SonicAnimationListR[] = {
-	{ 0, 0, 3, 0, 0.0625f, 0.1f },
-	{ 1, 0, 3, 1, 0.25f, 0.1f },
-	{ 2, 0, 3, 2, 0.25f, 0.1f },
-	{ 3, 0, 4, 0, 0.25f, 1 },
-	{ 4, 0, 3, 4, 0.03125f, 0.1f },
-	{ 5, 0, 3, 5, 0.03125f, 0.1f },
-	{ 6, 0, 11, 6, 0.25f, 3.4f },
-	{ 7, 0, 11, 7, 0.25f, 1.4f },
-	{ 8, 0, 11, 8, 0.25f, 0.8f },
-	{ 9, 0, 11, 9, 0.25f, 0.6f },
-	{ 10, 0, 10, 10, 0.5f, 0.4f },
-	{ 11, 0, 11, 11, 0.25f, 0.2f },
-	{ 12, 0, 10, 12, 0.25f, 0.7f },
-	{ 13, 0, 3, 13, 0.25f, 0.4f },
-	{ 14, 0, 4, 15, 0.125f, 0.3f },
-	{ 15, 0, 3, 15, 0.125f, 0.4f },
-	{ 16, 0, 4, 0, 1, 0.2f },
-	{ 17, 0, 4, 0, 1, 0.4f },
-	{ 18, 0, 9, 0, 0.25f, 0.3f },
-	{ 19, 0, 4, 20, 0.125f, 0.2f },
-	{ 20, 0, 3, 20, 0.25f, 0.6f },
-	{ 21, 0, 6, 21, 1, 0.1f },
-	{ 22, 0, 4, 0, 1, 1 },
-	{ 23, 0, 3, 23, 0.0625f, 1 },
-	{ 24, 0, 4, 25, 0.5f, 0.4f },
-	{ 25, 0, 4, 0, 0.0625f, 0.3f },
-	{ 26, 0, 4, 1, 0.0625f, 1 },
-	{ 27, 0, 4, 0, 1, 0.5f },
-	{ 28, 0, 3, 28, 0.0625f, 0.2f },
-	{ 29, 0, 3, 29, 0.0625f, 0.2f },
-	{ 30, 6, 3, 30, 0.5f, 1 },
-	{ 31, 0, 9, 35, 0.125f, 0.2f },
-	{ 32, 0, 11, 32, 0.5f, 0.4f },
-	{ 33, 0, 6, 33, 0.25f, 0.2f },
-	{ 34, 0, 4, 35, 0.5f, 1 },
-	{ 35, 0, 3, 35, 0.125f, 0.1f },
-	{ 36, 0, 3, 36, 0.03125f, 0.1f },
-	{ 37, 0, 3, 37, 0.03125f, 0.1f },
-	{ 38, 0, 11, 38, 0.5f, 0.5f },
-	{ 39, 0, 4, 6, 0.5f, 0.5f },
-	{ 40, 0, 3, 40, 0.5f, 0.6f },
-	{ 41, 0, 3, 41, 0.5f, 0.4f },
-	{ 42, 0, 3, 42, 0.125f, 0.3f },
-	{ 43, 0, 4, 44, 0.5f, 0.2f },
-	{ 44, 0, 3, 44, 0.5f, 0.1f },
-	{ 45, 0, 3, 45, 0.5f, 0.1f },
-	{ 46, 0, 4, 47, 0.5f, 0.1f },
-	{ 47, 0, 3, 47, 0.5f, 0.3f },
-	{ 48, 0, 4, 35, 1, 0.04f },
-	{ 49, 0, 4, 0, 0.5f, 0.3f },
-	{ 50, 0, 4, 0, 0.5f, 0.3f },
-	{ 51, 0, 4, 15, 0.5f, 0.3f },
-	{ 52, 0, 4, 15, 0.5f, 0.3f },
-	{ 53, 0, 7, 0, 1, 0.2f },
-	{ 54, 0, 6, 54, 1, 0.5f },
-	{ 55, 0, 3, 55, 0.125f, 0.3f },
-	{ 56, 0, 4, 15, 1, 0.25f },
-	{ 57, 0, 4, 58, 0.125f, 0.1f },
-	{ 58, 0, 3, 58, 1, 0.1f },
-	{ 59, 0, 6, 59, 1, 0.2f },
-	{ 60, 0, 6, 60, 0.25f, 1 },
-	{ 61, 0, 3, 61, 0.25f, 0.5f },
-	{ 62, 0, 6, 62, 0.25f, 0.1f },
-	{ 63, 0, 4, 0, 0.25f, 0.3f },
-	{ 64, 0, 4, 0, 0.25f, 0.3f },
-	{ 30, 6, 4, 30, 0.25f, 1 },
-	{ 30, 6, 3, 30, 0.25f, 1 },
-	{ 30, 6, 4, 30, 0.25f, 1 },
-		/*{ 65, 0, 4, 66, 0.25f, 1.4f },
-		{ 66, 0, 3, 66, 0.25f, 1 },
-		{ 67, 0, 4, 68, 0.125f, 0.4f },*/
-	{ 68, 0, 3, 68, 0.125f, 0.4f },
-	{ 69, 0, 4, 70, 0.25f, 0.1f },
-	{ 70, 0, 3, 70, 1, 0.2f },
-	{ 71, 0, 9, 0, 0.125f, 0.2f },
-	{ 72, 0, 6, 72, 0.25f, 0.2f },
-	{ 73, 0, 4, 0, 0.25f, 0.3f },
-	{ 74, 0, 3, 74, 0.25f, 0.4f },
-	{ 75, 0, 3, 75, 0.25f, 0.1f },
-	{ 76, 0, 6, 76, 0.25f, 0.3f },
-	{ 77, 0, 3, 77, 0.25f, 0.8f },
-	{ 78, 0, 3, 78, 0.125f, 0.2f },
-	{ 79, 0, 9, 35, 0.25f, 0.5f },
-	{ 80, 0, 5, 81, 0.25f, 0.5f },
-	{ 81, 0, 4, 0, 0.25f, 0.5f },
-	{ 82, 0, 9, 0, 0.25f, 0.5f },
-	{ 83, 0, 4, 0, 0.0625f, 0.15f },
-	{ 84, 0, 4, 0, 0.0625f, 0.15f },
-	{ 85, 0, 6, 85, 0.25f, 0.5f },
-	{ 86, 0, 3, 86, 1, 0.2f },
-	{ 87, 0, 3, 87, 1, 0.5f },
-	{ 88, 0, 3, 88, 0.03125f, 0.3f },
-	{ 89, 0, 3, 89, 0.03125f, 0.1f },
-	{ 90, 0, 9, 0, 0.03125f, 0.25f },
-	{ 91, 0, 4, 92, 0.25f, 1 },
-	{ 92, 0, 4, 93, 0.25f, 1 },
-	{ 93, 0, 4, 16, 0.25f, 0.2f },
-	{ 94, 0, 9, 0, 0.25f, 0.3f },
-	{ 95, 0, 9, 0, 0.25f, 0.3f },
-	{ 96, 0, 4, 97, 0.25f, 1 },
-	{ 97, 0, 4, 98, 0.25f, 1 },
-	{ 98, 0, 4, 99, 0.25f, 0.2f },
-	{ 99, 0, 4, 16, 0.25f, 1 },
-	{ 30, 6, 3, 30, 0.20f, 0.25f },
-	//{ 66, 0, 3, 100, 1, 3 },
-	{ 30, 6, 3, 30, 0.20f, 0.25f },
-	{ 30, 6, 3, 30, 0.20f, 0.25f },
-	{ 30, 6, 3, 30, 0.20f, 0.25f },
-	/*{ 101, 0, 6, 67, 0.25f, 0.3f },
-	{ 102, 0, 6, 67, 0.25f, 0.3f },
-	{ 103, 0, 6, 67, 0.25f, 0.3f },*/
-	{ 104, 0, 13, 104, 0.25f, 0.3f },
-	{ 105, 0, 13, 105, 0.25f, 0.3f },
-	{ 106, 0, 13, 106, 0.25f, 0.3f },
-	{ 107, 0, 13, 107, 0.25f, 0.3f },
-	{ 108, 0, 13, 108, 0.25f, 0.3f },
-	{ 109, 0, 13, 109, 0.25f, 0.3f },
-	{ 110, 0, 13, 110, 0.25f, 0.3f },
-	{ 111, 0, 13, 111, 0.25f, 0.3f },
-	{ 112, 0, 3, 112, 0.25f, 0.3f },
-	{ 113, 0, 3, 113, 0.25f, 0.3f },
-	{ 114, 0, 9, 15, 0.0625f, 0.2f },
-	{ 115, 0, 4, 15, 0.0625f, 0.35f },
-	{ 116, 0, 4, 15, 0.0625f, 0.35f },
-	{ 117, 0, 4, 15, 0.125f, 1 },
-	{ 118, 0, 6, 118, 1, 1 },
-	{ 119, 0, 6, 119, 1, 1 },
-	{ 120, 0, 3, 120, 1, 0.1f },
-	{ 121, 0, 13, 121, 0.25f, 0.3f },
-	{ 122, 0, 13, 122, 0.25f, 0.3f },
-	{ 123, 0, 13, 123, 0.25f, 0.3f },
-	{ 124, 0, 13, 124, 0.25f, 0.3f },
-	{ 125, 0, 3, 125, 0.25f, 0.3f },
-	{ 126, 0, 3, 126, 0.25f, 0.3f },
-	{ 127, 0, 6, 127, 0.25f, 0.4f },
-	{ 128, 0, 4, 129, 0.125f, 0.3f },
-	{ 129, 0, 3, 129, 0.125f, 0.4f },
-	{ 130, 0, 4, 121, 1, 0.3f },
-	{ 132, 0, 4, 121, 0.25f, 0.3f },
-	{ 131, 0, 4, 122, 0.25f, 0.3f },
-	{ 133, 0, 4, 130, 1, 1 },
-	{ 134, 0, 4, 130, 1, 1 },
-	{ 135, 0, 4, 130, 0.0625f, 1.25f },
-	{ 136, 0, 4, 130, 0.0625f, 1 },
-	{ 137, 0, 4, 130, 1, 1 },
-	{ 138, 0, 4, 130, 0.0625f, 1.25f },
-	{ 139, 0, 4, 130, 1, 1 },
-	{ 140, 0, 4, 130, 1, 1 },
-	{ 141, 0, 4, 130, 0.0625f, 1.25f },
-	{ 142, 0, 4, 130, 0.0625f, 1.25f },
-	{ 143, 0, 4, 130, 1, 1 },
-	{ 144, 0, 4, 130, 0.0625f, 1 },
-	{ 145, 0, 13, 121, 0.25f, 0.3f },
-	{ 146, 0, 13, 122, 0.25f, 0.3f },
-	{ 147, 0, 13, 123, 0.25f, 0.3f },
-	{ 148, 0, 13, 124, 0.25f, 0.3f },
-	{ 149, 0, 3, 125, 0.25f, 0.3f },
-	{ 150, 0, 3, 126, 0.25f, 0.3f },
-	{ 151, 0, 6, 127, 0.25f, 0.4f },
-	{ 152, 0, 4, 129, 0.125f, 0.3f },
-	{ 153, 0, 3, 129, 0.125f, 0.4f },
-	{ 154, 0, 4, 121, 0.125f, 0.4f },
-	{ 156, 0, 4, 121, 0.25f, 0.3f },
-	{ 155, 0, 4, 122, 0.25f, 0.3f },
-	{ 157, 0, 9, 129, 0.0625f, 1 },
-	{ 158, 0, 9, 129, 0.0625f, 1 },
-	{ 159, 0, 9, 129, 0.0625f, 1 },
-	{ 160, 0, 9, 129, 0.0625f, 1 },
-	{ 161, 0, 9, 129, 0.0625f, 1 },
-	{ 162, 0, 9, 129, 0.0625f, 1 },
-	{ 163, 0, 9, 129, 0.0625f, 1 },
-	{ 164, 0, 9, 129, 0.0625f, 1 },
-	{ 165, 0, 9, 129, 0.0625f, 1 },
-	{ 166, 0, 9, 129, 0.0625f, 1 },
-	{ 167, 0, 9, 129, 0.0625f, 1 },
-	{ 168, 0, 9, 129, 0.0625f, 1 },
-	{ 169, 0, 3, 169, 0.0625f, 0.1f },
-	{ 170, 0, 3, 170, 0.25f, 0.1f },
-	{ 171, 0, 11, 171, 0.25f, 1.4f },
-	{ 172, 0, 11, 172, 0.25f, 1.4f },
-	{ 173, 0, 11, 173, 0.25f, 1.4f },
-	{ 174, 0, 11, 174, 0.25f, 1.4f },
-	{ 175, 0, 4, 169, 0.25f, 1.4f },
-	{ 176, 0, 3, 176, 0.03125f, 0.1f },
-	{ 177, 0, 3, 177, 0.03125f, 0.1f },
-	{ 178, 0, 9, 0, 0.03125f, 0.25f },
-	{ 179, 0, 4, 169, 0.25f, 1.4f },
-	{ 180, 0, 6, 180, 0.25f, 1.4f },
-	{ 181, 0, 6, 181, 0.25f, 1.4f },
-	{ 182, 0, 6, 182, 1, 1 },
-	{ 183, 0, 6, 183, 1, 1 },
-	{ 184, 0, 3, 184, 1, 0.5f },
-	{ 185, 0, 4, 186, 0.25f, 0.3f },
-	{ 186, 0, 3, 186, 0.25f, 0.5f },
-	{ 187, 0, 3, 187, 0.25f, 0.8f },
-	{ 188, 0, 6, 188, 0.25f, 0.3f },
-	{ 189, 0, 4, 189, 0.25f, 0.2f },
-	{ 190, 0, 3, 190, 0.25f, 0.3f },
-	{ 191, 0, 3, 191, 0.25f, 0.2f },
-	{ 192, 0, 11, 192, 0.25f, 0.2f },
-	{ 193, 0, 11, 192, 0.25f, 0.2f },
-	{ 194, 0, 3, 194, 0.0625f, 0.2f },
-	{ 195, 0, 3, 195, 0.0625f, 0.2f },
-	{ 196, 0, 3, 196, 0.0625f, 0.2f },
-	{ 197, 0, 3, 197, 0.0625f, 0.2f },
-	{ 198, 0, 3, 198, 0.125f, 0.2f },
-	{ 199, 0, 3, 199, 0.25f, 0.2f },
-	{ 200, 0, 3, 200, 0.25f, 0.2f },
-	{ 201, 0, 6, 201, 0.125f, 0.8f },
-	{ 202, 0, 3, 202, 0.125f, 0.5f }
-};
+bool isSpeedCharacter() {
+	if (MainCharObj2[0]->CharID == Characters_Sonic || MainCharObj2[0]->CharID == Characters_Shadow || MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
+		return true;
+
+	return false;
+}
+
+bool isSonicAttacking() {
+
+	if (!isSpeedCharacter())
+		return false;
+
+	EntityData1* data1 = MainCharObj1[0];
+
+	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack || data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1)
+		return true;
+
+	return false;
+}
+
+Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
+{
+
+	if (isSonicAttacking() && GetCollidingPlayer(obj))
+		return 1;
+
+	FunctionPointer(Bool, original, (ObjectMaster * obj, ObjectMaster * other), CheckBreakObject_t->Target());
+	return original(obj, other);
+}
+
+void CheckBreakDynamite(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (obj) {
+		if (data->Action == 0 && isSonicAttacking() && GetCollidingPlayer(obj)) {
+			data->Status |= 4u;
+			obj->EntityData2->gap_44[0] = 0;
+		}
+	}
+
+	ObjectFunc(origin, Dynamite_t->Target());
+	origin(obj);
+}
+
+void CheckBreakDynamiteHiddenBase(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (obj) {
+		if (data->NextAction != 7 && isSonicAttacking() && GetCollidingPlayer(obj)) {
+			data->field_6 = 0;
+			data->NextAction = 7;
+		}
+	}
+
+	ObjectFunc(origin, DynamiteHiddenBase_t->Target());
+	origin(obj);
+}
+
+void CheckBreakDynamiteSandOcean(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (obj) {
+		if (data->Action == 0 && isSonicAttacking() && GetCollidingPlayer(obj)) {
+			data->Status |= 4u;
+			obj->EntityData2->gap_44[0] = 0;
+		}
+	}
+
+	ObjectFunc(origin, DynamiteSandOcean_t->Target());
+	origin(obj);
+}
+
+void CheckAndOpenPrisonLaneDoor(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+	EntityData2* data2 = obj->Data2.Entity;
+
+	if (obj) {
+
+		if (!isSpeedCharacter())
+			return;
+
+		if (data->Action == 0 && data->Rotation.x == 3)
+		{
+			data->Rotation.x = 32;
+		}
+		else  if (data->Action < 1 && GetCollidingPlayer(obj)) {
+			data->Rotation.x = 3;
+			data->Action = 1;
+		}
+	}
+}
+
+
+void CheckPrisonLaneDoor(ObjectMaster* obj) {
+
+	CheckAndOpenPrisonLaneDoor(obj);
+
+	ObjectFunc(origin, PrisonLaneDoor_t->Target());
+	origin(obj);
+}
+
+
+void CheckPrisonLaneDoor4(ObjectMaster* obj) {
+
+	CheckAndOpenPrisonLaneDoor(obj);
+
+	ObjectFunc(origin, PrisonLaneDoor4_t->Target());
+	origin(obj);
+}
+
+void CheckAndOpenIronGateDoor(ObjectMaster* obj) {
+
+	if (!isSpeedCharacter())
+		return;
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (GetCollidingPlayer(obj)) {
+		data->NextAction = 15;
+	}
+}
+
+
+void doorIG_r(ObjectMaster* obj) {
+
+	CheckAndOpenIronGateDoor(obj);
+
+	ObjectFunc(origin, DoorIG_t->Target());
+	origin(obj);
+}
+
+void doorIG2_r(ObjectMaster* obj) {
+
+	CheckAndOpenIronGateDoor(obj);
+
+	ObjectFunc(origin, DoorIG2_t->Target());
+	origin(obj);
+}
 
 
 static const void* const DrawChunkModelPtr = (void*)0x42E6C0;
@@ -226,6 +164,9 @@ static inline void DrawChunkModelASM(NJS_CNK_MODEL* a1)
 }
 
 bool isBallForm() {
+	if (MainCharObj2[0]->CharID2 == Characters_Amy || MainCharObj2[0]->CharID2 == Characters_MetalSonic)
+		return false;
+
 	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current >= 100 && MainCharObj2[0]->AnimInfo.Current <= 103 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
 	{
 		return true;
@@ -265,20 +206,35 @@ static void __declspec(naked) DrawChunkModel()
 }
 
 
-
 void Init_BetterSonic() {
 
-	WriteData((AnimationInfo**)0x716F0A, SonicAnimationListR);
 	WriteData<2>((int*)0x723E19, 0x90); //remove spin dash delay
 
+	Init_NewAnimation();
+
+	CheckBreakObject_t = new Trampoline((int)CheckBreakObject, (int)CheckBreakObject + 0x7, CheckBreakObject_r);
+	Dynamite_t = new Trampoline((int)Dynamite_Main, (int)Dynamite_Main + 0x5, CheckBreakDynamite);
+	DynamiteHiddenBase_t = new Trampoline((int)DynamiteHiddenBase_Main, (int)DynamiteHiddenBase_Main + 0x5, CheckBreakDynamiteHiddenBase);
+	DynamiteSandOcean_t = new Trampoline((int)DynamiteSandOcean_Main, (int)DynamiteSandOcean_Main + 0x6, CheckBreakDynamiteSandOcean);
+	PrisonLaneDoor_t = new Trampoline((int)PrisonLaneDoor, (int)PrisonLaneDoor + 0x6, CheckPrisonLaneDoor);
+	PrisonLaneDoor4_t = new Trampoline((int)PrisonLaneDoor4, (int)PrisonLaneDoor4 + 0x6, CheckPrisonLaneDoor4);
+
+	DoorIG_t = new Trampoline((int)DoorIG, (int)DoorIG + 0x6, doorIG_r);
+	DoorIG2_t = new Trampoline((int)DoorIG2, (int)DoorIG2 + 0x6, doorIG2_r);
+
+
+	//Remove upgrade display when ball form
 	WriteCall((void*)0x72080B, DrawChunkModel);	
 	WriteCall((void*)0x72086C, DrawChunkModel);	
 	WriteCall((void*)0x7208F1, DrawChunkModel);	
 	WriteCall((void*)0x720991, DrawChunkModel);
 
-	WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
+	//This makes the game crash when playing Costum Character... will have to dig that eventually.
+	/*WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
 	WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
 	WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
 	WriteCall((void*)0x720A59, FixUpgradeDisplay2);
-	WriteCall((void*)0x720AA6, FixUpgradeDisplay2);
+	WriteCall((void*)0x720AA6, FixUpgradeDisplay2);*/
+
+	WriteData<5>((int*)0x71AF71, 0x90); //remove amy grunt homing attack
 }
