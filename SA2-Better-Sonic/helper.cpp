@@ -242,28 +242,11 @@ static void __declspec(naked) DrawChunkModel()
 	}
 }
 
-double SA1dashspeed = 0.9; //0.40000001;
-double* SA1dashspeedptr = &SA1dashspeed;
-
-float bounceSpeed = 3.9000001;
-float bounceSpeed2 = 4.5999999;
-
-float* bouncespeedPtr = &bounceSpeed;
-float* bouncespeed2Ptr = &bounceSpeed2;
-
 
 void Init_Helper() {
 
-	if (sa1dash) {
-		WriteData<2>((int*)0x723E19, 0x90); //remove spin dash delay
-		WriteData((double**)0x725227, SA1dashspeedptr); //increase spin dash speed
-	}
-
-	if (superBounce)
-	{
-		WriteData((float**)0x71b0da, bouncespeedPtr);
-		WriteData((float**)0x71b0f6, bouncespeed2Ptr);
-	}
+	Init_Bounce();
+	init_SpinDash();
 
 	CheckBreakObject_t = new Trampoline((int)CheckBreakObject, (int)CheckBreakObject + 0x7, CheckBreakObject_r);
 	Dynamite_t = new Trampoline((int)Dynamite_Main, (int)Dynamite_Main + 0x5, CheckBreakDynamite);

@@ -9,6 +9,7 @@ bool sonicGrunt = true;
 bool shGrunt = true;
 bool amyGrunt = false;
 bool superBounce = true;
+bool shBounce = true;
 
 extern "C" {
 
@@ -22,6 +23,10 @@ extern "C" {
 
 		sonicBall = config->getBool("Sonic", "sonicBall", true);
 		sonicGrunt = config->getBool("Sonic", "sonicGrunt", true);
+
+		shBall = config->getBool("Shadow", "shBall", true);
+		shBounce = config->getBool("Shadow", "shBounce", true);
+		shGrunt = config->getBool("Shadow", "shGrunt", false);
 		
 		amyBall = config->getBool("Amy", "amyBall", true);
 		amyGrunt = config->getBool("Amy", "amyGrunt", false);
@@ -31,10 +36,10 @@ extern "C" {
 		Init_Helper();
 		Init_BetterSonic();
 
-		/*StoryEntry* story = (StoryEntry*)0x173A5E0;
+		StoryEntry* story = (StoryEntry*)0x173A5E0;
 		story->Type = 1;
 		story->Level = LevelIDs_RadicalHighway;
-		story->Character = Characters_Sonic;*/
+		story->Character = Characters_Shadow;
 
 	}
 

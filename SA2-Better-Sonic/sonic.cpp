@@ -30,7 +30,6 @@ void __cdecl Sonic_runsAction_r(EntityData1* data1, EntityData2* data2, CharObj2
 
 	if (data1->Action <= 1 || data1->Action > 4 && data1->Action < 61 || data1->Action == 64 || data1->Action == 65 || data1->Action > 68)
 		RestorePhysic(co2);
-
 }
 
 void Sonic_Main_r(ObjectMaster* obj)

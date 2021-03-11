@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\abilities">
+      <UniqueIdentifier>{8b1053d6-1295-42db-a11a-d51f2e610525}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mod.cpp">
@@ -32,6 +35,12 @@
     </ClCompile>
     <ClCompile Include="animations.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bounce.cpp">
+      <Filter>Source Files\abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="spindash.cpp">
+      <Filter>Source Files\abilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ extern bool sonicGrunt;
 extern bool shGrunt;
 extern bool amyGrunt;
 extern bool superBounce;
+extern bool shBounce;
 
 
 FunctionPointer(void, DrawObject, (NJS_OBJECT* a1), 0x42E730);
@@ -28,3 +29,5 @@ void Init_NewAnimation();
 void Init_StartEndPos();
 void Init_BetterSonic();
 void Init_Helper();
+void Init_Bounce();
+void init_SpinDash();
