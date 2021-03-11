@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-
 Trampoline* Sonic_Main_t;
 Trampoline* Sonic_RunsAction_t;
 
@@ -22,7 +21,6 @@ void SetPlayerSomersaultPhysics(CharObj2Base* co2, EntityData1* v1) {
 	v1->Collision->CollisionArray->push &= ~0x4000u;
 	return;
 }
-
 
 void __cdecl Sonic_runsAction_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* co2Sonic) {
 	FunctionPointer(void, original, (EntityData1 * data1, EntityData2 * data2, CharObj2Base * co2, SonicCharObj2 * co2Sonic), Sonic_RunsAction_t->Target());
@@ -47,8 +45,6 @@ void Sonic_Main_r(ObjectMaster* obj)
 	}
 }
 
-
-
 void Init_BetterSonic() {
 	Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
 	Sonic_RunsAction_t = new Trampoline((int)Sonic_ChecksForDamage, (int)Sonic_ChecksForDamage + 0x8, Sonic_runsAction_r);
@@ -60,6 +56,9 @@ void Init_BetterSonic() {
 
 	if (!amyGrunt)
 		WriteData<5>((int*)0x71AF71, 0x90);
+
+	if (!shGrunt)
+		WriteData<5>((int*)0x71B3EC, 0x90);
 
 	if (!sonicGrunt)
 		WriteData<5>((int*)0x71AF97, 0x90);

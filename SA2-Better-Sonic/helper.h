@@ -1,7 +1,7 @@
 #pragma once
 
 extern bool sa1dash;
-extern bool sa1jump;
+extern bool sa1SFX;
 extern bool sonicBall;
 extern bool shBall;
 extern bool amyBall;
@@ -24,6 +24,8 @@ ObjectFunc(DoorCCThing, 0x79AFB0);
 ObjectFunc(DoorHB, 0x715560);
 ObjectFunc(MetalBox, 0x6D6490);
 ObjectFunc(MetalBoxGravity, 0x77BB90);
+
+FunctionPointer(void, PlaySound3, (int a1, int a2), 0x437DD0);
 
 void Init_NewAnimation();
 void Init_StartEndPos();
