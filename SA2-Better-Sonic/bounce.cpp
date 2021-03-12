@@ -10,7 +10,7 @@ float* bouncespeed2Ptr = &bounceSpeed2;
 signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a3)
 {
 
-	if (!Action_Pressed[a1->PlayerNum])
+	if (!Action_Pressed[a1->PlayerNum] || a1->CharID2 == Characters_MetalSonic)
 		return 0;
 
 	if ((a1->Upgrades & Upgrades_SonicBounceBracelet) == 0)
@@ -52,7 +52,7 @@ static void __declspec(naked) Sonic_CheckBounceAttackASM()
 
 signed int Sonic_PerformBounce_r(CharObj2Base* a1, EntityData1* a2)
 {
-	if (!Action_Pressed[a1->PlayerNum])
+	if (!Action_Pressed[a1->PlayerNum] || a1->CharID2 == Characters_MetalSonic)
 		return 0;
 
 	if ((a1->Upgrades & Upgrades_SonicBounceBracelet) == 0)

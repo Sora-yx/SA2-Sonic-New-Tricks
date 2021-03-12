@@ -1,8 +1,6 @@
 #include "stdafx.h"
 
 Trampoline* Sonic_Main_t;
-Trampoline* Sonic_RunsAction_t;
-
 
 void RestorePhysic(CharObj2Base* co2) {
 	co2->PhysData.CollisionSize = PhysicsArray[0].CollisionSize;
@@ -22,13 +20,6 @@ void SetPlayerSomersaultPhysics(CharObj2Base* co2, EntityData1* v1) {
 	return;
 }
 
-void __cdecl Sonic_runsAction_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* co2Sonic) {
-	FunctionPointer(void, original, (EntityData1 * data1, EntityData2 * data2, CharObj2Base * co2, SonicCharObj2 * co2Sonic), Sonic_RunsAction_t->Target());
-	original(data1, data2, co2, co2Sonic);
-
-	if (data1->Action <= 1 || data1->Action > 4 && data1->Action < 61 || data1->Action == 64 || data1->Action == 65 || data1->Action > 68)
-		RestorePhysic(co2);
-}
 
 void Sonic_Main_r(ObjectMaster* obj)
 {
@@ -43,11 +34,13 @@ void Sonic_Main_r(ObjectMaster* obj)
 	{
 		SetPlayerSomersaultPhysics(co2, data1);
 	}
+	else {
+		RestorePhysic(co2);
+	}
 }
 
 void Init_BetterSonic() {
 	Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
-	Sonic_RunsAction_t = new Trampoline((int)Sonic_ChecksForDamage, (int)Sonic_ChecksForDamage + 0x8, Sonic_runsAction_r);
 
 	Init_NewAnimation();
 

@@ -45,11 +45,6 @@ extern "C" {
 
 		Init_Helper();
 		Init_BetterSonic();
-
-		StoryEntry* story = (StoryEntry*)0x173A5E0;
-		story->Type = 1;
-		story->Level = LevelIDs_RadicalHighway;
-		story->Character = Characters_Shadow;
 	}
 
 

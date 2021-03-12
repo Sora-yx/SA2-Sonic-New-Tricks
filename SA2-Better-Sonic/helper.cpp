@@ -19,6 +19,13 @@ bool isSpeedCharacter() {
 	return false;
 }
 
+bool is2PCharacter() {
+	if (MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
+		return true;
+
+	return false;
+}
+
 bool isSonicAttacking() {
 
 	if (!isSpeedCharacter())
@@ -285,7 +292,7 @@ void Init_Helper() {
 	WriteData<5>((int*)0x6D6B99, 0x90);
 	WriteData<5>((int*)0x77BFFB, 0x90);
 
-	if (sonicBall) {
+	if (sonicBall || shBall || amyBall) {
 		//Remove upgrade display when ball form
 		WriteCall((void*)0x72080B, DrawChunkModel);
 		WriteCall((void*)0x72086C, DrawChunkModel);
