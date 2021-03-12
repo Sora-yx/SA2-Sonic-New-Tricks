@@ -153,7 +153,6 @@
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="sonic.cpp" />
     <ClCompile Include="spindash.cpp" />
-    <ClCompile Include="startposition.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>

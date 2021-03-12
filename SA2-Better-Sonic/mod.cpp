@@ -43,7 +43,6 @@ extern "C" {
 			HelperFunctionsGlobal.ReplaceFile("Resource\\gd_PC\\MLT\\chao_chara_ss\\2.csb", "Resource\\gd_PC\\Sounds\\chao_chara_ss\\2.csb");
 		}
 
-		Init_StartEndPos();
 		Init_Helper();
 		Init_BetterSonic();
 

@@ -10,6 +10,7 @@ Trampoline* DoorIG_t;
 Trampoline* DoorIG2_t;
 Trampoline* MetalBox_t;
 Trampoline* MetalBoxGravity_t;
+Trampoline* BrokenDownSmoke_t;
 
 bool isSpeedCharacter() {
 	if (MainCharObj2[0]->CharID == Characters_Sonic || MainCharObj2[0]->CharID == Characters_Shadow || MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
@@ -26,6 +27,15 @@ bool isSonicAttacking() {
 	EntityData1* data1 = MainCharObj1[0];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack || data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1)
+		return true;
+
+	return false;
+}
+
+bool isSA2Miles() {
+	HMODULE miles = GetModuleHandle(L"SA2-Better-Miles");
+
+	if (miles)
 		return true;
 
 	return false;
@@ -242,6 +252,16 @@ static void __declspec(naked) DrawChunkModel()
 	}
 }
 
+void BrokenDownSmoke_r(ObjectMaster* a1) {
+
+	if (MainCharObj2[0]->CharID != Characters_MechTails && MainCharObj2[0]->CharID != Characters_MechEggman)
+		DeleteObject_(a1);
+	else {
+		ObjectFunc(origin, BrokenDownSmoke_t->Target());
+		origin(a1);
+	}
+}
+
 
 void Init_Helper() {
 
@@ -276,8 +296,14 @@ void Init_Helper() {
 		WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
 		WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
 
-		WriteCall((void*)0x720A59, FixUpgradeDisplay2);
+		WriteCall((void*)0x720A59, FixUpgradeDisplay2);		
+		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
 
 		WriteData<5>((int*)0x7185b5, 0x90); //remove the blue aura when jumping
+	}
+
+	if (!isSA2Miles()) {
+		WriteData<5>((void*)0x7899e8, 0x90); //remove powersupply
+		BrokenDownSmoke_t = new Trampoline((int)BrokenDownSmokeExec, (int)BrokenDownSmokeExec + 0x7, BrokenDownSmoke_r);
 	}
 }

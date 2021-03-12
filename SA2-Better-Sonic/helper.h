@@ -28,7 +28,6 @@ ObjectFunc(MetalBoxGravity, 0x77BB90);
 FunctionPointer(void, PlaySound3, (int a1, int a2), 0x437DD0);
 
 void Init_NewAnimation();
-void Init_StartEndPos();
 void Init_BetterSonic();
 void Init_Helper();
 void Init_Bounce();
