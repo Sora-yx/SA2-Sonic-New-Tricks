@@ -1,6 +1,7 @@
 #pragma once
 
 extern bool sa1dash;
+extern bool sa1speed;
 extern bool sa1SFX;
 extern bool sonicBall;
 extern bool sonicGrunt;
@@ -32,3 +33,4 @@ void Init_Helper();
 void Init_Bounce();
 void init_SpinDash();
 bool is2PCharacter();
+bool isBlackShield();

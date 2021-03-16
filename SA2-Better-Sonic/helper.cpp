@@ -54,6 +54,15 @@ bool isSA2Miles() {
 	return false;
 }
 
+bool isBlackShield() {
+	HMODULE dbs = GetModuleHandle(L"DisableBlackShield");
+
+	if (dbs)
+		return true;
+
+	return false;
+}
+
 Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
 {
 
@@ -390,6 +399,7 @@ void Init_Helper() {
 		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
 		//WriteData<5>((int*)0x7185b5, 0x90); //remove the blue aura when jumping
 	}
+
 
 	if (!isSA2Miles()) {
 		WriteData<5>((void*)0x7899e8, 0x90); //remove powersupply

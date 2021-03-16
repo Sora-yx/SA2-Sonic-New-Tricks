@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 bool sa1dash = true;
+bool sa1speed = true;
 bool sa1SFX = true;
 bool sonicBall = true;
 bool shGrunt = true;
@@ -18,6 +19,7 @@ extern "C" {
 	{
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 		sa1dash = config->getBool("General", "sa1dash", true);
+		sa1speed = config->getBool("General", "sa1speed", true);
 		sa1SFX = config->getBool("General", "sa1SFX", true);
 		superBounce = config->getBool("General", "superBounce", true);
 
