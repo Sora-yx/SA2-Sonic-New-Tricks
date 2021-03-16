@@ -3,10 +3,8 @@
 bool sa1dash = true;
 bool sa1SFX = true;
 bool sonicBall = true;
-bool shBall = true;
-bool amyBall = true;
-bool sonicGrunt = true;
 bool shGrunt = true;
+bool sonicGrunt = true;
 bool amyGrunt = false;
 bool superBounce = true;
 bool shBounce = true;
@@ -26,11 +24,9 @@ extern "C" {
 		sonicBall = config->getBool("Sonic", "sonicBall", true);
 		sonicGrunt = config->getBool("Sonic", "sonicGrunt", true);
 
-		shBall = config->getBool("Shadow", "shBall", true);
 		shBounce = config->getBool("Shadow", "shBounce", true);
 		shGrunt = config->getBool("Shadow", "shGrunt", false);
 		
-		amyBall = config->getBool("Amy", "amyBall", true);
 		amyGrunt = config->getBool("Amy", "amyGrunt", false);
 		delete config;
 

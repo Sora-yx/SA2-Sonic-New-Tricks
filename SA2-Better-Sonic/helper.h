@@ -3,13 +3,13 @@
 extern bool sa1dash;
 extern bool sa1SFX;
 extern bool sonicBall;
-extern bool shBall;
-extern bool amyBall;
 extern bool sonicGrunt;
 extern bool shGrunt;
 extern bool amyGrunt;
 extern bool superBounce;
 extern bool shBounce;
+
+extern AnimationInfo SonicAnimationListR[];
 
 
 FunctionPointer(void, DrawObject, (NJS_OBJECT* a1), 0x42E730);

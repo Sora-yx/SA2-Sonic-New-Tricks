@@ -8,9 +8,11 @@ Trampoline* PrisonLaneDoor_t;
 Trampoline* PrisonLaneDoor4_t;
 Trampoline* DoorIG_t;
 Trampoline* DoorIG2_t;
+Trampoline* RocketIG_t;
 Trampoline* MetalBox_t;
 Trampoline* MetalBoxGravity_t;
 Trampoline* BrokenDownSmoke_t;
+Trampoline* LoadCharacters_t;
 
 bool isSpeedCharacter() {
 	if (MainCharObj2[0]->CharID == Characters_Sonic || MainCharObj2[0]->CharID == Characters_Shadow || MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
@@ -19,12 +21,6 @@ bool isSpeedCharacter() {
 	return false;
 }
 
-bool is2PCharacter() {
-	if (MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
-		return true;
-
-	return false;
-}
 
 bool isSonicAttacking() {
 
@@ -34,6 +30,16 @@ bool isSonicAttacking() {
 	EntityData1* data1 = MainCharObj1[0];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack || data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1)
+		return true;
+
+	return false;
+}
+
+bool isCharaSelect() {
+	HMODULE charaMod = GetModuleHandle(L"SA2CharSel");
+	HMODULE charaModPlus = GetModuleHandle(L"CharacterSelectPlus");
+
+	if (charaMod || charaModPlus)
 		return true;
 
 	return false;
@@ -171,6 +177,22 @@ void doorIG2_r(ObjectMaster* obj) {
 	origin(obj);
 }
 
+void rocketIG_r(ObjectMaster* obj) {
+
+	EntityData1* data = obj->Data1.Entity;
+
+	if (isSpeedCharacter()) {
+
+		if (GetCollidingPlayer(obj) && data->Action == 5)
+		{
+			data->Action = 6;
+		}
+	}
+
+	ObjectFunc(origin, RocketIG_t->Target());
+	origin(obj);
+}
+
 void MetalBox_r(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1.Entity;
@@ -269,9 +291,68 @@ void BrokenDownSmoke_r(ObjectMaster* a1) {
 	}
 }
 
+static const void* const SonicTexEffectPtr = (void*)0x756AE0;
+static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
+{
+	__asm
+	{
+		mov edi, [a1]
+		call SonicTexEffectPtr
+	}
+}
+
+bool CheckChara() {
+
+	if (MainCharObj2[0]->CharID == Characters_Sonic && MainCharObj2[0]->CharID2 != Characters_Amy && sonicBall)
+		return true;
+
+
+	return false;
+}
+
+static void DoSonTexEffect(ObjectMaster* a1)
+{
+	if (!CheckChara())
+		DoSonicTextureEffectStuff(a1);
+}
+
+
+static void __declspec(naked) DoSonicTextureEffectStuffASM()
+{
+	__asm
+	{
+		push edi // a1
+
+		// Call your __cdecl function here:
+		call DoSonTexEffect
+
+		pop edi // a1
+		retn
+	}
+}
+
+void LoadCharacters_r() {
+
+	auto original = reinterpret_cast<decltype(LoadCharacters_r)*>(LoadCharacters_t->Target());
+	original();
+
+
+	if (isCharaSelect()) {
+		for (int i = 0; i < 2; i++) {
+			if (MainCharObj1[i]) {
+				if (MainCharObj2[i]->CharID == Characters_Sonic && MainCharObj2[i]->CharID2 != Characters_Amy)
+				{
+					MainCharObj2[i]->AnimInfo.Animations = SonicAnimationListR;
+				}
+			}
+		}
+	}
+
+	return;
+}
+
 
 void Init_Helper() {
-
 	Init_Bounce();
 	init_SpinDash();
 
@@ -292,7 +373,7 @@ void Init_Helper() {
 	WriteData<5>((int*)0x6D6B99, 0x90);
 	WriteData<5>((int*)0x77BFFB, 0x90);
 
-	if (sonicBall || shBall || amyBall) {
+	if (sonicBall) {
 		//Remove upgrade display when ball form
 		WriteCall((void*)0x72080B, DrawChunkModel);
 		WriteCall((void*)0x72086C, DrawChunkModel);
@@ -303,14 +384,18 @@ void Init_Helper() {
 		WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
 		WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
 
-		WriteCall((void*)0x720A59, FixUpgradeDisplay2);		
+		WriteCall((void*)0x720A59, FixUpgradeDisplay2);
 		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
 
-		WriteData<5>((int*)0x7185b5, 0x90); //remove the blue aura when jumping
+		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
+		//WriteData<5>((int*)0x7185b5, 0x90); //remove the blue aura when jumping
 	}
 
 	if (!isSA2Miles()) {
 		WriteData<5>((void*)0x7899e8, 0x90); //remove powersupply
 		BrokenDownSmoke_t = new Trampoline((int)BrokenDownSmokeExec, (int)BrokenDownSmokeExec + 0x7, BrokenDownSmoke_r);
 	}
+
+	if (isCharaSelect())
+		LoadCharacters_t = new Trampoline((int)LoadCharacters, (int)LoadCharacters + 0x6, LoadCharacters_r);
 }
