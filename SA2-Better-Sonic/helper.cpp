@@ -29,8 +29,12 @@ bool isSonicAttacking() {
 
 	EntityData1* data1 = MainCharObj1[0];
 
-	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack || data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1)
+	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
+		
 		return true;
+	}
+
 
 	return false;
 }
@@ -346,7 +350,12 @@ void LoadCharacters_r() {
 	original();
 
 
-	if (isCharaSelect()) {
+	if (CurrentLevel == LevelIDs_SandOcean || CurrentLevel == LevelIDs_HiddenBase) { 
+		if (MainCharObj2[0]->CharID <= Characters_Shadow)
+			LoadEggGolemCharAnims(); //fix quicksand death crash
+	}
+
+	if (isCharaSelect() && sonicBall) {
 		for (int i = 0; i < 2; i++) {
 			if (MainCharObj1[i]) {
 				if (MainCharObj2[i]->CharID == Characters_Sonic && MainCharObj2[i]->CharID2 != Characters_Amy)
@@ -397,7 +406,7 @@ void Init_Helper() {
 		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
 
 		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
-		//WriteData<5>((int*)0x7185b5, 0x90); //remove the blue aura when jumping
+
 	}
 
 
@@ -406,6 +415,5 @@ void Init_Helper() {
 		BrokenDownSmoke_t = new Trampoline((int)BrokenDownSmokeExec, (int)BrokenDownSmokeExec + 0x7, BrokenDownSmoke_r);
 	}
 
-	if (isCharaSelect())
-		LoadCharacters_t = new Trampoline((int)LoadCharacters, (int)LoadCharacters + 0x6, LoadCharacters_r);
+	LoadCharacters_t = new Trampoline((int)LoadCharacters, (int)LoadCharacters + 0x6, LoadCharacters_r);
 }

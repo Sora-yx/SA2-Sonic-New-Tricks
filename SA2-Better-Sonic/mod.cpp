@@ -27,7 +27,7 @@ extern "C" {
 		sonicGrunt = config->getBool("Sonic", "sonicGrunt", true);
 
 		shBounce = config->getBool("Shadow", "shBounce", true);
-		shGrunt = config->getBool("Shadow", "shGrunt", false);
+		shGrunt = config->getBool("Shadow", "shGrunt", true);
 		
 		amyGrunt = config->getBool("Amy", "amyGrunt", false);
 		delete config;
@@ -48,12 +48,6 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl OnFrame() {
 
-		if (Controllers[0].press & Buttons_Y)
-		{
-
-			//PlaySound3(0, 8206);
-			//PlaySound3(v38, 8209);
-		}
 	}
 
 
