@@ -10,6 +10,8 @@ extern bool amyGrunt;
 extern bool superBounce;
 extern bool shBounce;
 
+
+
 extern AnimationInfo SonicAnimationListR[];
 
 
@@ -21,6 +23,7 @@ ObjectFunc(PrisonLaneDoor, 0x606400);
 ObjectFunc(PrisonLaneDoor4, 0x606A10);
 ObjectFunc(DoorIG, 0x69D1D0);
 ObjectFunc(DoorIG2, 0x69F460);
+ObjectFunc(RocketIG, 0x6A10A0);
 ObjectFunc(DoorCCThing, 0x79AFB0);
 ObjectFunc(DoorHB, 0x715560);
 ObjectFunc(MetalBox, 0x6D6490);
@@ -30,7 +33,9 @@ ObjectFunc(MetalBoxGravity, 0x77BB90);
 void Init_NewAnimation();
 void Init_BetterSonic();
 void Init_Helper();
-void Init_Bounce();
+
+
 void init_SpinDash();
 bool is2PCharacter();
 bool isBlackShield();
+void Init_Bounce();

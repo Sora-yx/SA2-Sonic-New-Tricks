@@ -30,7 +30,7 @@ bool isSonicAttacking() {
 	EntityData1* data1 = MainCharObj1[0];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
 		
 		return true;
 	}
@@ -38,6 +38,24 @@ bool isSonicAttacking() {
 
 	return false;
 }
+
+
+bool isAttackingBoxes() {
+
+	if (!isSpeedCharacter())
+		return false;
+
+	EntityData1* data1 = MainCharObj1[0];
+
+	if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
+
+		return true;
+	}
+
+	return false;
+}
+
 
 bool isCharaSelect() {
 	HMODULE charaMod = GetModuleHandle(L"SA2CharSel");
@@ -70,7 +88,7 @@ bool isBlackShield() {
 Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
 {
 
-	if (isSonicAttacking() && GetCollidingPlayer(obj))
+	if (isAttackingBoxes() && GetCollidingPlayer(obj))
 		return 1;
 
 	FunctionPointer(Bool, original, (ObjectMaster * obj, ObjectMaster * other), CheckBreakObject_t->Target());
@@ -210,7 +228,7 @@ void MetalBox_r(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1.Entity;
 
-	if (GetCollidingPlayer(obj) && isSonicAttacking() && data->NextAction < 1)
+	if (GetCollidingPlayer(obj) && isAttackingBoxes() && data->NextAction < 1)
 	{
 		data->Collision->CollisionArray->push |= 0x4000u;
 		data->field_6 = 1;
@@ -228,7 +246,7 @@ void MetalBoxGravity_r(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1.Entity;
 
-	if (GetCollidingPlayer(obj) && isSonicAttacking() && data->NextAction < 1)
+	if (GetCollidingPlayer(obj) && isAttackingBoxes() && data->NextAction < 1)
 	{
 		data->Collision->CollisionArray->push |= 0x4000u;
 		data->field_6 = 1;
@@ -383,6 +401,7 @@ void Init_Helper() {
 
 	DoorIG_t = new Trampoline((int)DoorIG, (int)DoorIG + 0x6, doorIG_r);
 	DoorIG2_t = new Trampoline((int)DoorIG2, (int)DoorIG2 + 0x6, doorIG2_r);
+	RocketIG_t = new Trampoline((int)RocketIG, (int)RocketIG + 0x6, rocketIG_r);
 
 	MetalBox_t = new Trampoline((int)MetalBox, (int)MetalBox + 0x6, MetalBox_r);
 	MetalBoxGravity_t = new Trampoline((int)MetalBoxGravity, (int)MetalBoxGravity + 0x6, MetalBoxGravity_r);
@@ -406,7 +425,6 @@ void Init_Helper() {
 		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
 
 		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
-
 	}
 
 

@@ -14,7 +14,6 @@ HelperFunctions HelperFunctionsGlobal;
 
 extern "C" {
 
-
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
@@ -30,6 +29,7 @@ extern "C" {
 		shGrunt = config->getBool("Shadow", "shGrunt", true);
 		
 		amyGrunt = config->getBool("Amy", "amyGrunt", false);
+
 		delete config;
 
 		HelperFunctionsGlobal = helperFunctions;
@@ -44,14 +44,6 @@ extern "C" {
 		Init_Helper();
 		Init_BetterSonic();
 	}
-
-
-	__declspec(dllexport) void __cdecl OnFrame() {
-
-	}
-
-
-
 
 
 	__declspec(dllexport) ModInfo SA2ModInfo = { ModLoaderVer };
