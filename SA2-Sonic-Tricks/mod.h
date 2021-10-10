@@ -13,3 +13,4 @@ extern Buttons LightDashButton;
 extern Buttons BounceButton;
 extern Buttons SpinDashButton;
 extern Buttons SomersaultButton;
+extern bool SpinDashSomersault;

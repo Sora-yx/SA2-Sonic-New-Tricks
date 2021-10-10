@@ -14,6 +14,7 @@ bool sonicGrunt = true;
 bool amyGrunt = false;
 bool superBounce = true;
 bool shBounce = true;
+bool SpinDashSomersault = false;
 
 static const Buttons ButtonsList[]
 {
@@ -30,6 +31,7 @@ void ReadConfig(const char* path) {
 	sa1speed = config->getBool("General", "sa1speed", true);
 	sa1SFX = config->getBool("General", "sa1SFX", true);
 	superBounce = config->getBool("General", "superBounce", true);
+	SpinDashSomersault = config->getBool("General", "SpinDashSomersault", false);
 
 	sonicBall = config->getBool("Sonic", "sonicBall", true);
 	sonicGrunt = config->getBool("Sonic", "sonicGrunt", true);

@@ -43,12 +43,7 @@ void Sonic_Main_r(ObjectMaster* obj)
 }
 
 void Init_SonicNewTricks() {
-	Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
-
 	Init_NewAnimation();
-
-	WriteData<48>((int*)0x717a75, 0x90); //remove "restore physics" every frame, we will manually do it.
-
 
 	if (!amyGrunt)
 		WriteData<5>((int*)0x71AF71, 0x90);
@@ -58,4 +53,10 @@ void Init_SonicNewTricks() {
 
 	if (!sonicGrunt)
 		WriteData<5>((int*)0x71AF97, 0x90);
+
+	if (!SpinDashSomersault)
+		return;
+
+	Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
+	WriteData<48>((int*)0x717a75, 0x90); //remove "restore physics" every frame, we will manually do it.
 }
