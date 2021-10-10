@@ -148,17 +148,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="action-remap.cpp" />
     <ClCompile Include="animations.cpp" />
     <ClCompile Include="bounce.cpp" />
+    <ClCompile Include="config.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="sonic.cpp" />
     <ClCompile Include="spindash.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper.h" />
+    <ClInclude Include="mod.h" />
+    <ClInclude Include="SA2-Functions.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

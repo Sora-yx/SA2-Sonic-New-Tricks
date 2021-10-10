@@ -282,6 +282,8 @@ bool isBallForm() {
 	return false;
 }
 
+
+
 void FixUpgradeDisplay(NJS_CNK_MODEL* a1) {
 
 	if (isBallForm())
@@ -290,14 +292,6 @@ void FixUpgradeDisplay(NJS_CNK_MODEL* a1) {
 	return DrawChunkModelASM(a1);
 }
 
-
-void FixUpgradeDisplay2(NJS_OBJECT* a1) {
-
-	if (isBallForm())
-		return;
-
-	return DrawObject(a1);
-}
 
 static void __declspec(naked) DrawChunkModel()
 {
@@ -312,6 +306,16 @@ static void __declspec(naked) DrawChunkModel()
 		retn
 	}
 }
+
+
+void FixUpgradeDisplay2(NJS_OBJECT* a1) {
+
+	if (isBallForm())
+		return;
+
+	return DrawObject(a1);
+}
+
 
 void BrokenDownSmoke_r(ObjectMaster* a1) {
 
@@ -333,14 +337,6 @@ static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
 	}
 }
 
-bool CheckChara() {
-
-	if (MainCharObj2[0]->CharID == Characters_Sonic && MainCharObj2[0]->CharID2 != Characters_Amy && sonicBall)
-		return true;
-
-
-	return false;
-}
 
 static void DoSonTexEffect(ObjectMaster* a1)
 {

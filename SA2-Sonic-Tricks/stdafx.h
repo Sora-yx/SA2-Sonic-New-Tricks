@@ -7,6 +7,9 @@
 
 #include "SA2ModLoader.h"
 #include "Trampoline.h"
+#include "SA2-Functions.h"
+#include "mod.h"
 #include "helper.h"
 #include "IniFile.hpp"
+#include "Util.h"
 #include "AnimationFile.h"

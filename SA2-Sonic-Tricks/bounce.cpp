@@ -20,7 +20,7 @@ signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCha
 	}
 
 	a1->AnimInfo.Next = 30;
-	a2->Action = 69;
+	a2->Action = Action_BounceDown;
 	a2->Status |= 0x500u;
 	if (superBounce)
 		a1->Speed.y = -7.0;
@@ -63,7 +63,7 @@ signed int Sonic_PerformBounce_r(CharObj2Base* a1, EntityData1* a2)
 
 	a1->AnimInfo.Next = 30;
 	a2->Status |= Status_Attack | Status_Ball;
-	a2->Action = 69;
+	a2->Action = Action_BounceDown;
 	a1->Speed.y = -7.0;
 	PlaySoundProbably(8202, 0, 0, 0);
 	return 1;

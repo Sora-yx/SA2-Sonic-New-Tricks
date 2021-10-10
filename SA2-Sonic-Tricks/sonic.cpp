@@ -42,7 +42,7 @@ void Sonic_Main_r(ObjectMaster* obj)
 	}
 }
 
-void Init_BetterSonic() {
+void Init_SonicNewTricks() {
 	Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
 
 	Init_NewAnimation();
