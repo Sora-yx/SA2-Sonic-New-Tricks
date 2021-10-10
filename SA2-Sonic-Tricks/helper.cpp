@@ -298,6 +298,7 @@ void FixUpgradeDisplay2(NJS_OBJECT* a1) {
 
 	return DrawObject(a1);
 }
+
 static void __declspec(naked) DrawChunkModel()
 {
 	__asm

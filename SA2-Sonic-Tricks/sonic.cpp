@@ -3,19 +3,19 @@
 Trampoline* Sonic_Main_t;
 
 void RestorePhysic(CharObj2Base* co2) {
-	co2->PhysData.CollisionSize = PhysicsArray[0].CollisionSize;
-	co2->PhysData.RippleSize = PhysicsArray[0].RippleSize;
+	co2->PhysData.Height = PhysicsArray[0].Height;
+	co2->PhysData.Radius = PhysicsArray[0].Radius;
 	co2->PhysData.FloorGrip = PhysicsArray[0].FloorGrip;
-	co2->PhysData.YOff = PhysicsArray[0].YOff;
+	co2->PhysData.CenterHeight = PhysicsArray[0].CenterHeight;
 	return;
 }
 
 //Apply Somersault physics/collision 
 void SetPlayerSomersaultPhysics(CharObj2Base* co2, EntityData1* v1) {
-	co2->PhysData.CollisionSize = PhysicsArray[0].CollisionSize * 0.399888888888645; //0.4000000059604645;
-	co2->PhysData.RippleSize = PhysicsArray[0].RippleSize * 0.399888888888645; //0.4000000059604645;
+	co2->PhysData.Height = PhysicsArray[0].Height * 0.399888888888645; //0.4000000059604645;
+	co2->PhysData.Radius = PhysicsArray[0].Radius * 0.399888888888645; //0.4000000059604645;
 	co2->PhysData.FloorGrip = PhysicsArray[0].FloorGrip * 0.399888888888645; //0.4000000059604645;
-	co2->PhysData.YOff = PhysicsArray[0].YOff * 0.399888888888645; //0.4000000059604645;
+	co2->PhysData.CenterHeight = PhysicsArray[0].CenterHeight * 0.399888888888645; //0.4000000059604645;
 	v1->Collision->CollisionArray->push &= ~0x4000u;
 	return;
 }
@@ -30,10 +30,12 @@ void Sonic_Main_r(ObjectMaster* obj)
 	CharObj2Base* co2 = MainCharObj2[obj->Data2.Character->PlayerNum];
 	EntityData1* data1 = MainCharObj1[obj->Data2.Character->PlayerNum];
 
+
 	//Add somersault physics to spin dash, this is very hacky, but that's how SA2 does it, so... lol.
 	if (data1->Action == Action_SpinCharge || data1->Action == Action_SpinRelease || data1->Action >= 61 && data1->Action <= 63 || data1->Action >= 66 && data1->Action <= 68)
 	{
-		SetPlayerSomersaultPhysics(co2, data1);
+		if (sa1dash)
+			SetPlayerSomersaultPhysics(co2, data1);
 	}
 	else {
 		RestorePhysic(co2);
