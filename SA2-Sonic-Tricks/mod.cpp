@@ -8,9 +8,10 @@ extern "C" {
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
+		HelperFunctionsGlobal = helperFunctions;
 
 		ReadConfig(path); //get mod settings by the user
-		HelperFunctionsGlobal = helperFunctions;
+
 
 		Init_Helper();
 		Init_SonicNewTricks();

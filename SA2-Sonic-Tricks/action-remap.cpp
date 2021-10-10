@@ -12,12 +12,12 @@ static Sint32 __cdecl Sonic_CheckActionWindow_orig(EntityData1* data1, EntityDat
 	__asm
 	{
 		push[sonicCO2]
-		mov  ecx, [co2]
-		mov  edx, [data2]
-		mov  eax, [data1]
+		mov ecx, [co2]
+		mov edx, [data2]
+		mov eax, [data1]
 		call target
-		add  esp, 4
-		mov  result, eax
+		add esp, 4
+		mov result, eax
 	}
 	return result;
 }
@@ -56,8 +56,8 @@ static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2*
 		{
 			co2->field_D[1] = action;
 
-			// Just nope right out of here if Y isn't pressed.
-			if ((Controllers[pnum].press & LightDashButton) == 0)
+			// Just nope right out of here if Light Dash button isn't pressed.
+			if (( ((Controllers[pnum].press & LightDashButton) == 0) && LightDashButton != buttons_XB) || LightDashButton == buttons_XB && !Action_Pressed[pnum]) 
 			{
 				return 0;
 			}
@@ -75,15 +75,18 @@ static void __declspec(naked) Sonic_CheckActionWindowASM()
 {
 	__asm
 	{
-		push[esp + 4]
-		push ecx
-		push edx
-		push eax
-		call Sonic_CheckActionWindow
-		add  esp, 4 // eax
-		pop  edx
-		pop  ecx
-		add  esp, 4
+		push[esp + 04h] // a4
+		push ecx // a3
+		push edx // a2
+		push eax // a1
+
+		// Call your __cdecl function here:
+		call Sonic_CheckActionWindow_r
+
+		add esp, 4 // a1<eax> is also used for return value
+		pop edx // a2
+		pop ecx // a3
+		add esp, 4 // a4
 		retn
 	}
 }

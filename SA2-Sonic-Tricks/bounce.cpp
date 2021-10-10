@@ -10,7 +10,7 @@ float* bouncespeed2Ptr = &bounceSpeed2;
 signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a3)
 {
 
-	if (!Action_Pressed[a1->PlayerNum] || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
+	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
 		return 0;
 
 	if ((a1->Upgrades & Upgrades_SonicBounceBracelet) == 0)
@@ -52,7 +52,7 @@ static void __declspec(naked) Sonic_CheckBounceAttackASM()
 
 signed int Sonic_PerformBounce_r(CharObj2Base* a1, EntityData1* a2)
 {
-	if (!Action_Pressed[a1->PlayerNum] || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
+	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
 		return 0;
 
 	if ((a1->Upgrades & Upgrades_SonicBounceBracelet) == 0)
@@ -94,9 +94,8 @@ void Init_Bounce() {
 		WriteData((float**)0x71b0f6, bouncespeed2Ptr);
 	}
 
-	if (superBounce || shBounce)
-	{
-		WriteJump((void*)0x725270, Sonic_CheckBounceAttackASM);
-		WriteJump((void*)0x7252D0, Sonic_PerformBounceASM);
-	}
+
+	WriteJump((void*)0x725270, Sonic_CheckBounceAttackASM);
+	WriteJump((void*)0x7252D0, Sonic_PerformBounceASM);
+
 }
