@@ -14,76 +14,7 @@ Trampoline* MetalBoxGravity_t;
 Trampoline* BrokenDownSmoke_t;
 Trampoline* LoadCharacters_t;
 
-bool isSpeedCharacter() {
-	if (MainCharObj2[0]->CharID == Characters_Sonic || MainCharObj2[0]->CharID == Characters_Shadow || MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
-		return true;
 
-	return false;
-}
-
-
-bool isSonicAttacking() {
-
-	if (!isSpeedCharacter())
-		return false;
-
-	EntityData1* data1 = MainCharObj1[0];
-
-	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
-		
-		return true;
-	}
-
-
-	return false;
-}
-
-
-bool isAttackingBoxes() {
-
-	if (!isSpeedCharacter())
-		return false;
-
-	EntityData1* data1 = MainCharObj1[0];
-
-	if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
-
-		return true;
-	}
-
-	return false;
-}
-
-
-bool isCharaSelect() {
-	HMODULE charaMod = GetModuleHandle(L"SA2CharSel");
-	HMODULE charaModPlus = GetModuleHandle(L"CharacterSelectPlus");
-
-	if (charaMod || charaModPlus)
-		return true;
-
-	return false;
-}
-
-bool isSA2Miles() {
-	HMODULE miles = GetModuleHandle(L"SA2-Better-Miles");
-
-	if (miles)
-		return true;
-
-	return false;
-}
-
-bool isBlackShield() {
-	HMODULE dbs = GetModuleHandle(L"DisableBlackShield");
-
-	if (dbs)
-		return true;
-
-	return false;
-}
 
 Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
 {
@@ -271,10 +202,11 @@ static inline void DrawChunkModelASM(NJS_CNK_MODEL* a1)
 }
 
 bool isBallForm() {
+
 	if (MainCharObj2[0]->CharID2 == Characters_Amy || MainCharObj2[0]->CharID2 == Characters_MetalSonic)
 		return false;
 
-	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current >= 100 && MainCharObj2[0]->AnimInfo.Current <= 103 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
+	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current == 100 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
 	{
 		return true;
 	}
@@ -293,7 +225,7 @@ void FixUpgradeDisplay(NJS_CNK_MODEL* a1) {
 }
 
 
-static void __declspec(naked) DrawChunkModel()
+static void __declspec(naked) CheckDrawUpgradeModel()
 {
 	__asm
 	{
@@ -340,7 +272,7 @@ static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
 
 static void DoSonTexEffect(ObjectMaster* a1)
 {
-	if (!CheckChara())
+	if (!isBallForm())
 		DoSonicTextureEffectStuff(a1);
 }
 
@@ -409,10 +341,10 @@ void Init_Helper() {
 
 	if (sonicBall) {
 		//Remove upgrade display when ball form
-		WriteCall((void*)0x72080B, DrawChunkModel);
-		WriteCall((void*)0x72086C, DrawChunkModel);
-		WriteCall((void*)0x7208F1, DrawChunkModel);
-		WriteCall((void*)0x720991, DrawChunkModel);
+		WriteCall((void*)0x72080B, CheckDrawUpgradeModel);
+		WriteCall((void*)0x72086C, CheckDrawUpgradeModel);
+		WriteCall((void*)0x7208F1, CheckDrawUpgradeModel);
+		WriteCall((void*)0x720991, CheckDrawUpgradeModel);
 
 		WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
 		WriteCall((void*)0x720A0C, FixUpgradeDisplay2);

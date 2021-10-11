@@ -12,7 +12,6 @@ extern "C" {
 
 		ReadConfig(path); //get mod settings by the user
 
-
 		Init_Helper();
 		Init_SonicNewTricks();
 		Init_ActionRemap();
