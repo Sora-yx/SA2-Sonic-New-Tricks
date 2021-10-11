@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-
 //Original Code by SonicFreak94, edited here to let the player change controls of the actions.
 
 Trampoline* Sonic_CheckActionWindow_t;
@@ -22,7 +21,6 @@ static Sint32 __cdecl Sonic_CheckActionWindow_orig(EntityData1* data1, EntityDat
 	}
 	return result;
 }
-
 
 static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2)
 {
@@ -489,7 +487,12 @@ static void __declspec(naked) Sonic_SomersaultASM()
 
 
 void Init_ActionRemap() {
-	Sonic_CheckActionWindow_t = new Trampoline((int)0x7230E0, (int)0x7230E5, Sonic_CheckActionWindowASM);
-	Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
+
+	if (LightDashButton != buttons_XB)
+		Sonic_CheckActionWindow_t = new Trampoline((int)0x7230E0, (int)0x7230E5, Sonic_CheckActionWindowASM);
+
+	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
+		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
+
 	return;
 }

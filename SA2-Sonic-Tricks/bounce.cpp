@@ -6,7 +6,6 @@ float bounceSpeed2 = 4.5999999;
 float* bouncespeedPtr = &bounceSpeed;
 float* bouncespeed2Ptr = &bounceSpeed2;
 
-
 signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a3)
 {
 
@@ -48,7 +47,6 @@ static void __declspec(naked) Sonic_CheckBounceAttackASM()
 		retn
 	}
 }
-
 
 signed int Sonic_PerformBounce_r(CharObj2Base* a1, EntityData1* a2)
 {
@@ -94,8 +92,7 @@ void Init_Bounce() {
 		WriteData((float**)0x71b0f6, bouncespeed2Ptr);
 	}
 
-
 	WriteJump((void*)0x725270, Sonic_CheckBounceAttackASM);
 	WriteJump((void*)0x7252D0, Sonic_PerformBounceASM);
-
+	return;
 }

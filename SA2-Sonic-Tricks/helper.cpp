@@ -191,63 +191,6 @@ void MetalBoxGravity_r(ObjectMaster* obj) {
 }
 
 
-static const void* const DrawChunkModelPtr = (void*)0x42E6C0;
-static inline void DrawChunkModelASM(NJS_CNK_MODEL* a1)
-{
-	__asm
-	{
-		mov eax, [a1]
-		call DrawChunkModelPtr
-	}
-}
-
-bool isBallForm() {
-
-	if (MainCharObj2[0]->CharID2 == Characters_Amy || MainCharObj2[0]->CharID2 == Characters_MetalSonic)
-		return false;
-
-	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current == 100 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-
-
-void FixUpgradeDisplay(NJS_CNK_MODEL* a1) {
-
-	if (isBallForm())
-		return;
-
-	return DrawChunkModelASM(a1);
-}
-
-
-static void __declspec(naked) CheckDrawUpgradeModel()
-{
-	__asm
-	{
-		push eax // a1
-
-		// Call your __cdecl function here:
-		call FixUpgradeDisplay
-
-		pop eax // a1
-		retn
-	}
-}
-
-
-void FixUpgradeDisplay2(NJS_OBJECT* a1) {
-
-	if (isBallForm())
-		return;
-
-	return DrawObject(a1);
-}
-
 
 void BrokenDownSmoke_r(ObjectMaster* a1) {
 
@@ -259,37 +202,6 @@ void BrokenDownSmoke_r(ObjectMaster* a1) {
 	}
 }
 
-static const void* const SonicTexEffectPtr = (void*)0x756AE0;
-static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
-{
-	__asm
-	{
-		mov edi, [a1]
-		call SonicTexEffectPtr
-	}
-}
-
-
-static void DoSonTexEffect(ObjectMaster* a1)
-{
-	if (!isBallForm())
-		DoSonicTextureEffectStuff(a1);
-}
-
-
-static void __declspec(naked) DoSonicTextureEffectStuffASM()
-{
-	__asm
-	{
-		push edi // a1
-
-		// Call your __cdecl function here:
-		call DoSonTexEffect
-
-		pop edi // a1
-		retn
-	}
-}
 
 void LoadCharacters_r() {
 
@@ -318,9 +230,6 @@ void LoadCharacters_r() {
 
 
 void Init_Helper() {
-	Init_Bounce();
-	init_SpinDash();
-
 	CheckBreakObject_t = new Trampoline((int)CheckBreakObject, (int)CheckBreakObject + 0x7, CheckBreakObject_r);
 	Dynamite_t = new Trampoline((int)Dynamite_Main, (int)Dynamite_Main + 0x5, CheckBreakDynamite);
 	DynamiteHiddenBase_t = new Trampoline((int)DynamiteHiddenBase_Main, (int)DynamiteHiddenBase_Main + 0x5, CheckBreakDynamiteHiddenBase);
@@ -338,23 +247,6 @@ void Init_Helper() {
 	WriteData<5>((int*)0x6cdf58, 0x90); //remove speed nerf when destroying boxes	
 	WriteData<5>((int*)0x6D6B99, 0x90);
 	WriteData<5>((int*)0x77BFFB, 0x90);
-
-	if (sonicBall) {
-		//Remove upgrade display when ball form
-		WriteCall((void*)0x72080B, CheckDrawUpgradeModel);
-		WriteCall((void*)0x72086C, CheckDrawUpgradeModel);
-		WriteCall((void*)0x7208F1, CheckDrawUpgradeModel);
-		WriteCall((void*)0x720991, CheckDrawUpgradeModel);
-
-		WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
-		WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
-		WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
-
-		WriteCall((void*)0x720A59, FixUpgradeDisplay2);
-		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
-
-		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
-	}
 
 
 	if (!isSA2Miles()) {

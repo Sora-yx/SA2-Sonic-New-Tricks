@@ -1,6 +1,20 @@
 #include "stdafx.h"
 
 
+bool isBallForm() {
+
+	if (MainCharObj2[0]->CharID2 == Characters_Amy || MainCharObj2[0]->CharID2 == Characters_MetalSonic)
+		return false;
+
+	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current == 100 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
 bool CheckChara() {
 
 	if (MainCharObj2[0]->CharID == Characters_Sonic && MainCharObj2[0]->CharID2 != Characters_Amy && sonicBall)

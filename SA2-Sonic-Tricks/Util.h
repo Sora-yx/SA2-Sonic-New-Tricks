@@ -8,3 +8,4 @@ bool isBlackShield();
 bool isAttackingBoxes();
 bool isSonicAttacking();
 bool isSpeedCharacter();
+bool isBallForm();

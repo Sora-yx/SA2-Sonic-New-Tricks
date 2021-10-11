@@ -117,3 +117,24 @@ static inline int sub_7235C0(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a
 	return result;
 }
 
+
+static const void* const DrawChunkModelPtr = (void*)0x42E6C0;
+static inline void DrawChunkModel(NJS_CNK_MODEL* a1)
+{
+	__asm
+	{
+		mov eax, [a1]
+		call DrawChunkModelPtr
+	}
+}
+
+
+static const void* const SonicTexEffectPtr = (void*)0x756AE0;
+static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
+{
+	__asm
+	{
+		mov edi, [a1]
+		call SonicTexEffectPtr
+	}
+}
