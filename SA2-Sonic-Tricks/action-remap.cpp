@@ -312,7 +312,6 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		break;
 	case Action_MechPunch: //idk
 
-
 		if (Somersault_ApplyChanges(sonicCO2, data, co2, Action_Somersault2, Action_SomersaultFinish, flagCol))
 			return 1;
 

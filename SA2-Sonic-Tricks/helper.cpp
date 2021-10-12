@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+//This page hack several objects from the game to make them working with Speed characters
+
 Trampoline* CheckBreakObject_t;
 Trampoline* Dynamite_t;
 Trampoline* DynamiteHiddenBase_t;
@@ -13,8 +15,6 @@ Trampoline* MetalBox_t;
 Trampoline* MetalBoxGravity_t;
 Trampoline* BrokenDownSmoke_t;
 Trampoline* LoadCharacters_t;
-
-
 
 Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
 {
@@ -92,7 +92,6 @@ void CheckAndOpenPrisonLaneDoor(ObjectMaster* obj) {
 	}
 }
 
-
 void CheckPrisonLaneDoor(ObjectMaster* obj) {
 
 	CheckAndOpenPrisonLaneDoor(obj);
@@ -100,7 +99,6 @@ void CheckPrisonLaneDoor(ObjectMaster* obj) {
 	ObjectFunc(origin, PrisonLaneDoor_t->Target());
 	origin(obj);
 }
-
 
 void CheckPrisonLaneDoor4(ObjectMaster* obj) {
 
@@ -190,8 +188,6 @@ void MetalBoxGravity_r(ObjectMaster* obj) {
 	origin(obj);
 }
 
-
-
 void BrokenDownSmoke_r(ObjectMaster* a1) {
 
 	if (MainCharObj2[0]->CharID != Characters_MechTails && MainCharObj2[0]->CharID != Characters_MechEggman)
@@ -202,32 +198,44 @@ void BrokenDownSmoke_r(ObjectMaster* a1) {
 	}
 }
 
+void Force_NewAnimationList() {
+	for (int i = 0; i < 2; i++) {
+		if (MainCharObj1[i]) {
+			if (MainCharObj2[i]->CharID == Characters_Sonic && MainCharObj2[i]->CharID2 != Characters_Amy)
+			{
+				MainCharObj2[i]->AnimInfo.Animations = SonicAnimationListR;
+			}
+		}
+	}
+}
+
+void CheckAndLoad_quickSandDeathAnimation() {
+
+	if (CurrentLevel != LevelIDs_SandOcean && CurrentLevel != LevelIDs_HiddenBase)
+		return;
+
+	for (int i = 0; i < 2; i++) {
+		if (MainCharObj1[i]) {
+			if (MainCharObj2[i]->CharID <= Characters_Shadow)
+				LoadEggGolemCharAnims(); //fix quicksand death crash
+		}
+	}
+}
 
 void LoadCharacters_r() {
 
 	auto original = reinterpret_cast<decltype(LoadCharacters_r)*>(LoadCharacters_t->Target());
 	original();
 
+	CheckAndLoad_quickSandDeathAnimation();
 
-	if (CurrentLevel == LevelIDs_SandOcean || CurrentLevel == LevelIDs_HiddenBase) { 
-		if (MainCharObj2[0]->CharID <= Characters_Shadow)
-			LoadEggGolemCharAnims(); //fix quicksand death crash
-	}
+	if (!isCharaSelect() || !sonicBall)
+		return;
 
-	if (isCharaSelect() && sonicBall) {
-		for (int i = 0; i < 2; i++) {
-			if (MainCharObj1[i]) {
-				if (MainCharObj2[i]->CharID == Characters_Sonic && MainCharObj2[i]->CharID2 != Characters_Amy)
-				{
-					MainCharObj2[i]->AnimInfo.Animations = SonicAnimationListR;
-				}
-			}
-		}
-	}
+	Force_NewAnimationList();
 
 	return;
 }
-
 
 void Init_Helper() {
 	CheckBreakObject_t = new Trampoline((int)CheckBreakObject, (int)CheckBreakObject + 0x7, CheckBreakObject_r);
@@ -244,7 +252,7 @@ void Init_Helper() {
 	MetalBox_t = new Trampoline((int)MetalBox, (int)MetalBox + 0x6, MetalBox_r);
 	MetalBoxGravity_t = new Trampoline((int)MetalBoxGravity, (int)MetalBoxGravity + 0x6, MetalBoxGravity_r);
 
-	WriteData<5>((int*)0x6cdf58, 0x90); //remove speed nerf when destroying boxes	
+	WriteData<5>((int*)0x6cdf58, 0x90); //remove "speed nerf" when destroying boxes	
 	WriteData<5>((int*)0x6D6B99, 0x90);
 	WriteData<5>((int*)0x77BFFB, 0x90);
 
