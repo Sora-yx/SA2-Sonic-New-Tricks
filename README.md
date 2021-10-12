@@ -29,9 +29,9 @@ In SA1, when you jump and Homing Attack, Sonic uses a ball form, this was remove
 ![alt text](https://i.imgur.com/y7MAGZa.gif)
 
 
-## Several attacks can now destroy the boxes
+![alt text](https://i.imgur.com/dMzfium.png)
 
-I personally never really liked how only the somersault was able to destroy the boxes, so I made it so even a single homing attack can destroy them.
+I personally never really liked how only the somersault was able to destroy the boxes. Therefore, I made it so many different attacks can now break the boxes, including the Spin Dash.
 
 ![alt text](https://s4.gifyu.com/images/ezgif.com-optimize6983eb4f3282454b.gif)
 
@@ -44,17 +44,17 @@ The bounce is now faster and also allow you to go higher. Yeah, that's it, what 
  
 ![alt text](https://i.imgur.com/R0yKuew.gif)
 
-## More levels beatable
-
-Just like Better Miles, this mod will allow Sonic (or any speed character) to beat more stage than what they originally can, most of the Tails and Eggman stages should now be beatable.
-Shadow Bounce Bracelet
-
 ## The bounce for Shadow has been added.
 
 "But Sora, there is already a code in the mod manager for that"
-- I'm aware of that, but this feature in the mod has 2 advantages over the code:
-- the upgrade won't be displayed on him, so it won't look weird.
-- The code originally makes the game crashes when using Metal Sonic's Black Shield, this is not the case here. 
+- I'm aware of that, but this feature in the mod has two advantages over the code:
+	- the upgrade won't be displayed on him, so it won't look weird.
+	- The code originally makes the game crashes when using Metal Sonic's Black Shield, this is not the case here. 
+
+## More levels beatable
+
+Just like Better Miles, this mod will allow Sonic (or any speed character) to beat more stage than what they originally can, most of the Tails and Eggman stages should now be beatable.
+
 
 ## Disable Homing Attack grunt sound.
 
@@ -62,11 +62,12 @@ Self-explanatory, there is option for each speed character to disable the grunt 
 
 ![alt text](https://i.imgur.com/pQoy2sx.png)
 
-I know you’ve been waiting for this for like 20 years now. You always hated that the Light Dash, the Somersault, the Spin Dash and all of that was just on B and X right? Well, you will be happy to know that this mod allows you to remap these actions and let you choice between B, X, and Y. With default settings, Light Dash is on Y, Bounce is on X, Somersault is on B and Spin Dash is on X. Yeap, here it is!
+I know you’ve been waiting for this. You always hated that sonic actions share the same button right? Well, you will be happy to know that this mod allows you to remap these actions and let you choice between B, X, and Y. 
+**By default, Light Dash is on Y, Bounce is on X, Somersault is on B and Spin Dash is on X. Yeap, here it is!**
  
 # Mod compatibility
 
-Unlike Better Miles, this mod should in theory work fine with Character Select Plus, but make sure to load this mod after Character Select. In fact, you should put thid mod at the bottom of your mod list.
+Unlike Better Miles, this mod should in theory work fine with Character Select Plus, but make sure to load this mod after Character Select. In fact, you should put this mod at the bottom of your mod list.
  
 ![alt text](https://i.imgur.com/AlflkNn.png)
 
