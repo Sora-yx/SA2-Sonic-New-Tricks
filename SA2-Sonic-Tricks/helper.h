@@ -22,6 +22,5 @@ void Init_ActionRemap();
 
 
 void init_SpinDash();
-bool is2PCharacter();
 bool isBlackShield();
 void Init_Bounce();

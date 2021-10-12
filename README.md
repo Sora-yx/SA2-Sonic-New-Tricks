@@ -62,7 +62,7 @@ Self-explanatory, there is option for each speed character to disable the grunt 
 
 ![alt text](https://i.imgur.com/pQoy2sx.png)
 
-I know you’ve been waiting for this. You always hated that sonic actions share the same button right? Well, you will be happy to know that this mod allows you to remap these actions and let you choice between B, X, and Y. 
+I know you’ve been waiting for this. You always hated that sonic actions share the same button right? Well, you will be happy to know that this mod allows you to remap these actions and let you choose between B, X, and Y. 
 **By default, Light Dash is on Y, Bounce is on X, Somersault is on B and Spin Dash is on X. Yeap, here it is!**
  
 # Mod compatibility
