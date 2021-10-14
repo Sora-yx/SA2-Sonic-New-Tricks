@@ -154,6 +154,7 @@
     <ClCompile Include="config.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="mod.cpp" />
+    <ClCompile Include="rail.cpp" />
     <ClCompile Include="sonic.cpp" />
     <ClCompile Include="spindash.cpp" />
     <ClCompile Include="stdafx.cpp" />

@@ -222,12 +222,49 @@ void CheckAndLoad_quickSandDeathAnimation() {
 	}
 }
 
+void CheckAndSetHackObject() {
+
+	if (isSA2Miles())
+		return;
+
+	CharObj2Base* co2 = MainCharObj2[0];
+
+	if (co2->CharID == Characters_MechTails || co2->CharID == Characters_MechEggman) {
+		WriteData<1>((int*)0x715b58, 0x6);
+		WriteData<1>((int*)0x715aa8, 0x6);
+		WriteData<1>((int*)0x7158bf, 0x6);
+
+		WriteData<1>((int*)0x79b427, 0x6);
+		WriteData<1>((int*)0x79b959, 0x6);
+		WriteData<1>((int*)0x79be57, 0x6);
+		return; //if one player has a mech, we don't need to hack the door
+	}
+
+	//hack so non mech character can destroy the doors
+	if (CurrentLevel == LevelIDs_HiddenBase) {
+		//Hidden base door Col Stuff
+		WriteData<1>((int*)0x715b58, 0x1);
+		WriteData<1>((int*)0x715aa8, 0x1);
+		WriteData<1>((int*)0x7158bf, 0x1);
+	}
+
+	if (CurrentLevel == LevelIDs_CannonsCoreT) {
+		//CC door col Stuff
+		WriteData<1>((int*)0x79b427, 0x1);
+		WriteData<1>((int*)0x79b959, 0x1);
+		WriteData<1>((int*)0x79be57, 0x1);
+	}
+
+	return;
+}
+
 void LoadCharacters_r() {
 
 	auto original = reinterpret_cast<decltype(LoadCharacters_r)*>(LoadCharacters_t->Target());
 	original();
 
 	CheckAndLoad_quickSandDeathAnimation();
+	CheckAndSetHackObject();
 
 	if (!isCharaSelect() || !sonicBall)
 		return;

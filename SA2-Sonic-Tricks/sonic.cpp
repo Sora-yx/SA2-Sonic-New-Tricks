@@ -29,6 +29,7 @@ void Sonic_Main_r(ObjectMaster* obj)
 	CharObj2Base* co2 = MainCharObj2[obj->Data2.Character->PlayerNum];
 	EntityData1* data1 = MainCharObj1[obj->Data2.Character->PlayerNum];
 
+
 	//Add somersault physics to spin dash, this is very hacky, but that's how SA2 does it, so... lol.
 	if (data1->Action == Action_SpinCharge || data1->Action == Action_SpinRelease || data1->Action >= 61 && data1->Action <= 63 || data1->Action >= 66 && data1->Action <= 68)
 	{

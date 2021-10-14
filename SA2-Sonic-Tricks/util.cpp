@@ -3,7 +3,7 @@
 
 bool isBallForm() {
 
-	if (MainCharObj2[0]->CharID2 == Characters_Amy || MainCharObj2[0]->CharID2 == Characters_MetalSonic)
+	if (MainCharObj2[0]->CharID2 != Characters_Sonic)
 		return false;
 
 	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current == 100 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
@@ -87,4 +87,16 @@ bool isSA2Miles() {
 
 bool isBlackShield() {
 	return GetModuleHandle(L"DisableBlackShield") != NULL;
+}
+
+float GetSquare(NJS_VECTOR* orig, NJS_VECTOR* dest) {
+	return powf(dest->x - orig->x, 2) + powf(dest->y - orig->y, 2) + powf(dest->z - orig->z, 2);
+}
+
+float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest) {
+	return sqrtf(GetSquare(orig, dest));
+}
+
+bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
+	return GetDistance(center, pos) <= radius;
 }
