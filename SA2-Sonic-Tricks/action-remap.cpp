@@ -431,7 +431,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 				}
 				else
 				{
-					if (co2->CharID2 <= Characters_Shadow)
+					if (co2->CharID2 <= Characters_Shadow || isAmySpinDash())
 					{
 						Sonic_StartSpindash(data, co2, sonicCO2);
 					}

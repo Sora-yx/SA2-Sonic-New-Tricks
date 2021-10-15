@@ -10,3 +10,4 @@ bool isSonicAttacking();
 bool isSpeedCharacter();
 bool isBallForm();
 bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius);
+bool isAmySpinDash();

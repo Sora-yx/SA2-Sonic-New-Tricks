@@ -89,6 +89,17 @@ bool isBlackShield() {
 	return GetModuleHandle(L"DisableBlackShield") != NULL;
 }
 
+
+bool isAmySpinDash() {
+	HMODULE amy = GetModuleHandle(L"amyspindash");
+	HMODULE amy2 = GetModuleHandle(L"SA2-Amy-Metal-SpinDash");
+
+	if (amy || amy2)
+		return true;
+
+	return false;
+}
+
 float GetSquare(NJS_VECTOR* orig, NJS_VECTOR* dest) {
 	return powf(dest->x - orig->x, 2) + powf(dest->y - orig->y, 2) + powf(dest->z - orig->z, 2);
 }
