@@ -24,3 +24,4 @@ void Init_ActionRemap();
 void init_SpinDash();
 bool isBlackShield();
 void Init_Bounce();
+void SpinDash_ButtonCheckOnFrames();

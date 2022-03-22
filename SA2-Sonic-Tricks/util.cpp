@@ -90,6 +90,10 @@ bool isBlackShield() {
 }
 
 
+bool isSS() {
+	return GetModuleHandle(L"SA2-Super-Sonic") != NULL;
+}
+
 bool isAmySpinDash() {
 	HMODULE amy = GetModuleHandle(L"amyspindash");
 	HMODULE amy2 = GetModuleHandle(L"SA2-Amy-Metal-SpinDash");

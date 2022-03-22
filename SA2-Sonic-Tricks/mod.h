@@ -5,7 +5,7 @@ void ReadConfig(const char* path);
 extern HelperFunctions HelperFunctionsGlobal;
 
 enum customButton {
-	buttons_XB = 514,
+	buttons_XB = 0x402,
 };
 
 

@@ -269,7 +269,7 @@ void LoadCharacters_r() {
 	if (!isCharaSelect() || !sonicBall)
 		return;
 
-	Force_NewAnimationList();
+	//Force_NewAnimationList();
 
 	return;
 }

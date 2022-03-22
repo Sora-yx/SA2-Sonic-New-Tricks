@@ -2,8 +2,8 @@
 
 //Original Code by SonicFreak94, edited here to let the player change controls of the actions.
 
-Trampoline* Sonic_CheckActionWindow_t;
-Trampoline* Sonic_Somersault_t;
+Trampoline* Sonic_CheckActionWindow_t = nullptr;
+Trampoline* Sonic_Somersault_t = nullptr;
 
 static Sint32 __cdecl Sonic_CheckActionWindow_orig(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2)
 {
@@ -157,6 +157,7 @@ void SomersaultFinish2(CharObj2Base* co2, SonicCharObj2* sonicCO2) {
 	return;
 }
 
+
 int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2, char oldAction, char nextAction, int flagCol) {
 
 	char pnum = co2->PlayerNum;
@@ -275,8 +276,6 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 	bool isSpinDashPressed = (SpinDashButton != buttons_XB && ((Controllers[pnum].press & SpinDashButton)));
 	bool isSpinDashHeld = (SpinDashButton != buttons_XB && ((Controllers[pnum].on & SpinDashButton)));
 	bool isSomersaultHeld = (SomersaultButton != buttons_XB && ((Controllers[pnum].on & SomersaultButton)));
-	bool oldInputSomersaultHeld = (SomersaultButton == buttons_XB && Action_Held[pnum]);
-	bool oldInputSomersaultPressed = (SomersaultButton == buttons_XB && Action_Pressed[pnum]);
 
 	switch (data->Action)
 	{
@@ -473,10 +472,7 @@ static void __declspec(naked) Sonic_SomersaultASM()
 		push[esp + 08h] // co2
 		push[esp + 08h] // data
 		push eax // sonicCO2
-
-		// Call your __cdecl function here:
 		call Sonic_Somersault_r
-
 		add esp, 4 // sonicCO2<eax> is also used for return value
 		add esp, 4 // data
 		add esp, 4 // co2
@@ -484,6 +480,35 @@ static void __declspec(naked) Sonic_SomersaultASM()
 	}
 }
 
+char SpinDash_Held[2];
+char SpinDash_Released[2];
+
+void SpinDash_ButtonCheckOnFrames()
+{
+	if (GameState != GameStates_Ingame)
+		return;
+
+	for (uint8_t i = 0; i < 2; i++)
+	{
+		if (Controllers[i].on & SpinDashButton)
+		{
+			SpinDash_Held[i] = 1;
+		}
+		else
+		{
+			SpinDash_Held[i] = 0;
+		}
+
+		if (Controllers[i].release & SpinDashButton)
+		{
+			SpinDash_Released[i] = 1;
+		}
+		else
+		{
+			SpinDash_Released[i] = 0;
+		}
+	}
+}
 
 void Init_ActionRemap() {
 
@@ -492,6 +517,18 @@ void Init_ActionRemap() {
 
 	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
 		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
+
+	if (SpinDashButton != buttons_XB) {
+		WriteData((char**)0x725e68, SpinDash_Released);
+		WriteData((char**)0x7251b8, SpinDash_Held);
+	}
+
+	if (SpinDashButton == Buttons_Y)
+	{
+		//release spin dash from XB (0x402 = 1026) to Y (0x200 = 502) 
+		WriteData<1>((int*)0x71a0fb, 0x2);
+		WriteData<1>((int*)0x71a0fa, 0x0);
+	}
 
 	return;
 }

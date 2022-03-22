@@ -25,6 +25,12 @@ extern "C" {
 		Init_ActionRemap();
 	}
 
+	__declspec(dllexport) void __cdecl OnFrame() {
+
+		SpinDash_ButtonCheckOnFrames();
+	}
+
+
 
 	__declspec(dllexport) ModInfo SA2ModInfo = { ModLoaderVer };
 }
