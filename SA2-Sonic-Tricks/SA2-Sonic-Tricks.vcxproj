@@ -152,7 +152,7 @@
     <ClCompile Include="animations.cpp" />
     <ClCompile Include="bounce.cpp" />
     <ClCompile Include="config.cpp" />
-    <ClCompile Include="helper.cpp" />
+    <ClCompile Include="objects.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="rail.cpp" />
     <ClCompile Include="sonic.cpp" />

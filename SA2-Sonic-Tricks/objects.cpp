@@ -269,12 +269,11 @@ void LoadCharacters_r() {
 	if (!isCharaSelect() || !sonicBall)
 		return;
 
-	//Force_NewAnimationList();
-
 	return;
 }
 
-void Init_Helper() {
+void Init_ObjectsHacks() {
+
 	CheckBreakObject_t = new Trampoline((int)CheckBreakObject, (int)CheckBreakObject + 0x7, CheckBreakObject_r);
 	Dynamite_t = new Trampoline((int)Dynamite_Main, (int)Dynamite_Main + 0x5, CheckBreakDynamite);
 	DynamiteHiddenBase_t = new Trampoline((int)DynamiteHiddenBase_Main, (int)DynamiteHiddenBase_Main + 0x5, CheckBreakDynamiteHiddenBase);

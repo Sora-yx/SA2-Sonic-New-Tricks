@@ -52,12 +52,9 @@ static void __declspec(naked) CheckDrawUpgradeModel()
 {
 	__asm
 	{
-		push eax // a1
-
-		// Call your __cdecl function here:
+		push eax 
 		call FixUpgradeDisplay
-
-		pop eax // a1
+		pop eax 
 		retn
 	}
 }
@@ -80,12 +77,9 @@ static void __declspec(naked) DoSonicTextureEffectStuffASM()
 {
 	__asm
 	{
-		push edi // a1
-
-		// Call your __cdecl function here:
+		push edi 
 		call DoSonTexEffect
-
-		pop edi // a1
+		pop edi
 		retn
 	}
 }
@@ -93,6 +87,7 @@ static void __declspec(naked) DoSonicTextureEffectStuffASM()
 void Init_SonicNewTricks() {
 
 	Init_NewAnimation();
+
 	Init_Bounce();
 	init_SpinDash();
 

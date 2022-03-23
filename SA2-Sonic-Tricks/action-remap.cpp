@@ -192,8 +192,10 @@ int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2
 }
 
 void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* data) {
+
 	int curFlag;
 	int charID = co2->CharID2;
+
 	if (co2->PhysData.RunSpeed < (double)co2->Speed.x)
 	{
 		Sonic_DoObstacleSomersault(data, sonicCO2, co2);
@@ -232,6 +234,7 @@ void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* da
 	{
 		curFlag = 0x3000;
 	}
+
 	Play3DSound_Pos(curFlag, &data->Position, 0, 0, 127);
 	VibeThing(0, 15, co2->PlayerNum, 6);
 	sonicCO2->SpindashCounter = 0;
@@ -240,19 +243,19 @@ void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* da
 //This actually also manage the spin dash
 signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2)
 {
-	signed int result; // eax
-	CollisionInfo* col; // eax
-	int flagCol; // eax
-	int pNum; // eax
-	char somerSaultNextAction; // al
-	char getSomersaultNextAction; // al
+	signed int result; 
+	CollisionInfo* col; 
+	int flagCol; 
+	int pNum; 
+	char somerSaultNextAction;
+	char getSomersaultNextAction; 
 	char SomersaultNextAct;
 
-	double getSpd; // st7
+	double getSpd; 
 	char getSomersaultNextAction2;
-	int pnum; // esi
-	__int16 spinDashCount; // ax
-	__int16 timer; // ax
+	int pnum; 
+	__int16 spinDashCount; 
+	__int16 timer; 
 	__int16 status = data->Status;
 
 	if ((status & Status_HoldObject) != 0)

@@ -16,7 +16,7 @@
     <ClCompile Include="sonic.cpp">
       <Filter>Source Files\Character</Filter>
     </ClCompile>
-    <ClCompile Include="helper.cpp">
+    <ClCompile Include="objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mod.cpp">

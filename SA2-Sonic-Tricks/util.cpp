@@ -1,12 +1,11 @@
 #include "stdafx.h"
 
-
 bool isBallForm() {
 
-	if (MainCharObj2[0]->CharID2 != Characters_Sonic)
+	if (SonicCO2PtrExtern->base.CharID2 != Characters_Sonic)
 		return false;
 
-	if (MainCharObj2[0]->AnimInfo.Current == 30 || MainCharObj2[0]->AnimInfo.Current == 100 || MainCharObj2[0]->AnimInfo.Current >= 65 && MainCharObj2[0]->AnimInfo.Current <= 67)
+	if (SonicCO2PtrExtern->base.AnimInfo.Current == 30 || SonicCO2PtrExtern->base.AnimInfo.Current == 100 || SonicCO2PtrExtern->base.AnimInfo.Current >= 65 && SonicCO2PtrExtern->base.AnimInfo.Current <= 67)
 	{
 		return true;
 	}
@@ -14,30 +13,28 @@ bool isBallForm() {
 	return false;
 }
 
-
 bool CheckChara() {
 
-	if (MainCharObj2[0]->CharID == Characters_Sonic && MainCharObj2[0]->CharID2 != Characters_Amy && sonicBall)
+	if (SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && sonicBall)
 		return true;
 
 	return false;
 }
-
 
 bool isSpeedCharacter() {
-	if (MainCharObj2[0]->CharID == Characters_Sonic || MainCharObj2[0]->CharID == Characters_Shadow || MainCharObj2[0]->CharID2 == Characters_MetalSonic || MainCharObj2[0]->CharID2 == Characters_Amy)
+
+	if (SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow || SonicCO2PtrExtern->base.CharID2 == Characters_MetalSonic || SonicCO2PtrExtern->base.CharID2 == Characters_Amy)
 		return true;
 
 	return false;
 }
-
 
 bool isSonicAttacking() {
 
 	if (!isSpeedCharacter())
 		return false;
 
-	EntityData1* data1 = MainCharObj1[0];
+	EntityData1* data1 = MainCharObj1[SonicCO2PtrExtern->base.PlayerNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
 		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
@@ -49,13 +46,12 @@ bool isSonicAttacking() {
 	return false;
 }
 
-
 bool isAttackingBoxes() {
 
 	if (!isSpeedCharacter())
 		return false;
 
-	EntityData1* data1 = MainCharObj1[0];
+	EntityData1* data1 = MainCharObj1[SonicCO2PtrExtern->base.PlayerNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
 		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
