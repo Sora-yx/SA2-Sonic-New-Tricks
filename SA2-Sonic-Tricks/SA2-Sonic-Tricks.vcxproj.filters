@@ -10,9 +10,6 @@
     <ClCompile Include="util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="animations.cpp">
-      <Filter>Source Files\Character</Filter>
-    </ClCompile>
     <ClCompile Include="sonic.cpp">
       <Filter>Source Files\Character</Filter>
     </ClCompile>

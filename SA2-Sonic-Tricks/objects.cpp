@@ -198,16 +198,6 @@ void BrokenDownSmoke_r(ObjectMaster* a1) {
 	}
 }
 
-void Force_NewAnimationList() {
-	for (int i = 0; i < 2; i++) {
-		if (MainCharObj1[i]) {
-			if (MainCharObj2[i]->CharID == Characters_Sonic && MainCharObj2[i]->CharID2 != Characters_Amy)
-			{
-				MainCharObj2[i]->AnimInfo.Animations = SonicAnimationListR;
-			}
-		}
-	}
-}
 
 void CheckAndLoad_quickSandDeathAnimation() {
 

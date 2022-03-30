@@ -29,14 +29,23 @@ void Sonic_Main_r(ObjectMaster* obj)
 	CharObj2Base* co2 = MainCharObj2[obj->Data2.Character->PlayerNum];
 	EntityData1* data1 = MainCharObj1[obj->Data2.Character->PlayerNum];
 
+	if (co2 && (co2->CharID2 == Characters_Sonic || co2->CharID2 == Characters_Shadow)) {
 
-	//Add somersault physics to spin dash, this is very hacky, but that's how SA2 does it, so... lol.
-	if (data1->Action == Action_SpinCharge || data1->Action == Action_SpinRelease || data1->Action >= 61 && data1->Action <= 63 || data1->Action >= 66 && data1->Action <= 68)
-	{
-		SetPlayerSomersaultPhysics(co2, data1);
+		if (data1->Action == Action_Jump && sonicBall)
+		{
+			data1->Status |= Status_Ball;
+		}
 	}
-	else {
-		RestorePhysic(co2);
+
+	if (SpinDashSomersault) {
+		//Add somersault physics to spin dash, this is very hacky, but that's how SA2 does it, so... lol.
+		if (data1->Action == Action_SpinCharge || data1->Action == Action_SpinRelease || data1->Action >= 61 && data1->Action <= 63 || data1->Action >= 66 && data1->Action <= 68)
+		{
+			SetPlayerSomersaultPhysics(co2, data1);
+		}
+		else {
+			RestorePhysic(co2);
+		}
 	}
 }
 
@@ -86,8 +95,6 @@ static void __declspec(naked) DoSonicTextureEffectStuffASM()
 
 void Init_SonicNewTricks() {
 
-	Init_NewAnimation();
-
 	Init_Bounce();
 	init_SpinDash();
 
@@ -118,9 +125,10 @@ void Init_SonicNewTricks() {
 		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
 	}
 
-	if (!SpinDashSomersault)
-		return;
 
-	Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
-	WriteData<48>((int*)0x717a75, 0x90); //remove "restore physics" every frame, we will manually do it.
+	if (SpinDashSomersault || sonicBall)
+		Sonic_Main_t = new Trampoline((int)Sonic_Main, (int)Sonic_Main + 0x6, Sonic_Main_r);
+
+	if (SpinDashSomersault)
+		WriteData<48>((int*)0x717a75, 0x90); //remove "restore physics" every frame, we will manually do it.
 }

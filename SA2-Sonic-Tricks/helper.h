@@ -10,9 +10,6 @@ extern bool amyGrunt;
 extern bool superBounce;
 extern bool shBounce;
 
-extern AnimationInfo SonicAnimationListR[];
-
-void Init_NewAnimation();
 void Init_SonicNewTricks();
 void Init_ObjectsHacks();
 void Init_ActionRemap();

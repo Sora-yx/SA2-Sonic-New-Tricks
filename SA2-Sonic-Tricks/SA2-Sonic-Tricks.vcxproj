@@ -149,7 +149,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="action-remap.cpp" />
-    <ClCompile Include="animations.cpp" />
     <ClCompile Include="bounce.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="objects.cpp" />
