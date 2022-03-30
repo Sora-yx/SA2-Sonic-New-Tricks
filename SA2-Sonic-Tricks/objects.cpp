@@ -18,9 +18,15 @@ Trampoline* LoadCharacters_t;
 
 Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
 {
+	ObjectMaster* col = GetCollidingPlayer(obj);
 
-	if (isAttackingBoxes() && GetCollidingPlayer(obj))
-		return 1;
+	if (col)
+	{
+		char pnum = GetPlayerNumber(col);
+
+		if (isAttackingBoxes(pnum))
+			return 1;
+	}
 
 	FunctionPointer(Bool, original, (ObjectMaster * obj, ObjectMaster * other), CheckBreakObject_t->Target());
 	return original(obj, other);
@@ -157,13 +163,24 @@ void MetalBox_r(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1.Entity;
 
-	if (GetCollidingPlayer(obj) && isAttackingBoxes() && data->NextAction < 1)
+	if (data)
 	{
-		data->Collision->CollisionArray->push |= 0x4000u;
-		data->field_6 = 1;
-		AddScore(20);
-		Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
-		data->NextAction = 1;
+		if (data->Collision) {
+
+			if (data->Collision->CollidingObject) {
+
+				char pnum = GetPlayerNumber(data->Collision->CollidingObject->Object);
+
+				if (isAttackingMetalBoxes(pnum) && data->NextAction < 1)
+				{
+					data->Collision->CollisionArray->push |= 0x4000u;
+					data->field_6 = 1;
+					AddScore(20);
+					Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
+					data->NextAction = 1;
+				}
+			}
+		}
 	}
 
 	ObjectFunc(origin, MetalBox_t->Target());
@@ -175,18 +192,31 @@ void MetalBoxGravity_r(ObjectMaster* obj) {
 
 	EntityData1* data = obj->Data1.Entity;
 
-	if (GetCollidingPlayer(obj) && isAttackingBoxes() && data->NextAction < 1)
+	if (data)
 	{
-		data->Collision->CollisionArray->push |= 0x4000u;
-		data->field_6 = 1;
-		AddScore(20);
-		Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
-		data->NextAction = 1;
+		if (data->Collision) {
+
+			if (data->Collision->CollidingObject) {
+
+				char pnum = GetPlayerNumber(data->Collision->CollidingObject->Object);
+
+				if (isAttackingMetalBoxes(pnum) && data->NextAction < 1)
+				{
+					data->Collision->CollisionArray->push |= 0x4000u;
+					data->field_6 = 1;
+					AddScore(20);
+					Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
+					data->NextAction = 1;
+				}
+			}
+		}
 	}
 
 	ObjectFunc(origin, MetalBoxGravity_t->Target());
 	origin(obj);
 }
+
+
 
 void BrokenDownSmoke_r(ObjectMaster* a1) {
 

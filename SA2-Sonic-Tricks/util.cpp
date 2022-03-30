@@ -2,7 +2,7 @@
 
 bool isBallForm() {
 
-	if (SonicCO2PtrExtern->base.CharID2 != Characters_Sonic)
+	if (!SonicCO2PtrExtern || SonicCO2PtrExtern->base.CharID2 != Characters_Sonic)
 		return false;
 
 	if (SonicCO2PtrExtern->base.AnimInfo.Current == 30 || SonicCO2PtrExtern->base.AnimInfo.Current == 100 || SonicCO2PtrExtern->base.AnimInfo.Current >= 65 && SonicCO2PtrExtern->base.AnimInfo.Current <= 67)
@@ -15,7 +15,7 @@ bool isBallForm() {
 
 bool CheckChara() {
 
-	if (SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && sonicBall)
+	if ((SonicCO2PtrExtern && SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && sonicBall))
 		return true;
 
 	return false;
@@ -23,8 +23,11 @@ bool CheckChara() {
 
 bool isSpeedCharacter() {
 
-	if (SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow || SonicCO2PtrExtern->base.CharID2 == Characters_MetalSonic || SonicCO2PtrExtern->base.CharID2 == Characters_Amy)
-		return true;
+	if (SonicCO2PtrExtern) {
+
+		if (SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow || SonicCO2PtrExtern->base.CharID2 == Characters_MetalSonic || SonicCO2PtrExtern->base.CharID2 == Characters_Amy)
+			return true;
+	}
 
 	return false;
 }
@@ -46,12 +49,12 @@ bool isSonicAttacking() {
 	return false;
 }
 
-bool isAttackingBoxes() {
+bool isAttackingBoxes(char pNum) {
 
 	if (!isSpeedCharacter())
 		return false;
 
-	EntityData1* data1 = MainCharObj1[SonicCO2PtrExtern->base.PlayerNum];
+	EntityData1* data1 = MainCharObj1[pNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
 		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
@@ -62,10 +65,32 @@ bool isAttackingBoxes() {
 	return false;
 }
 
-bool isHedgePannel() {
-	return GetModuleHandle(L"HedgePanel") != NULL;
+bool isAttackingMetalBoxes(char pNum) {
+
+	if (!isSpeedCharacter())
+		return false;
+
+	EntityData1* data1 = MainCharObj1[pNum];
+	CharObj2Base* co2 = MainCharObj2[pNum];
+
+	if (!data1 || !co2)
+		return false;
+
+	if (co2->Upgrades & Upgrades_SonicFlameRing || co2->Upgrades & Upgrades_ShadowFlameRing) {
+
+		if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
+			|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
+bool isHedgePannel() {
+	return GetModuleHandle(L"HedgePanel") != NULL || GetModuleHandle(L"FastSomersault") != NULL;
+}
 
 bool isCharaSelect() {
 	HMODULE charaMod = GetModuleHandle(L"SA2CharSel");
