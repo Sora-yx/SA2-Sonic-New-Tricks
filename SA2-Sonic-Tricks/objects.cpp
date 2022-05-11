@@ -53,7 +53,7 @@ void CheckBreakDynamiteHiddenBase(ObjectMaster* obj) {
 
 	if (obj) {
 		if (data->NextAction != 7 && isSonicAttacking() && GetCollidingPlayer(obj)) {
-			data->field_6 = 0;
+			data->Timer = 0;
 			data->NextAction = 7;
 		}
 	}
@@ -174,7 +174,7 @@ void MetalBox_r(ObjectMaster* obj) {
 				if (isAttackingMetalBoxes(pnum) && data->NextAction < 1)
 				{
 					data->Collision->CollisionArray->push |= 0x4000u;
-					data->field_6 = 1;
+					data->Timer = 1;
 					AddScore(20);
 					Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
 					data->NextAction = 1;
@@ -203,7 +203,7 @@ void MetalBoxGravity_r(ObjectMaster* obj) {
 				if (isAttackingMetalBoxes(pnum) && data->NextAction < 1)
 				{
 					data->Collision->CollisionArray->push |= 0x4000u;
-					data->field_6 = 1;
+					data->Timer = 1;
 					AddScore(20);
 					Play3DSound_Pos(4113, &data->Position, 1, 127, 80);
 					data->NextAction = 1;

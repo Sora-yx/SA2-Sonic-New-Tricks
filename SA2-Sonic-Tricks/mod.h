@@ -14,3 +14,5 @@ extern Buttons BounceButton;
 extern Buttons SpinDashButton;
 extern Buttons SomersaultButton;
 extern bool SpinDashSomersault;
+
+void Init_JumpBall();

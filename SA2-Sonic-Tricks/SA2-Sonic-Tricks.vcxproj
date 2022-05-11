@@ -151,6 +151,7 @@
     <ClCompile Include="action-remap.cpp" />
     <ClCompile Include="bounce.cpp" />
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="jumpball.cpp" />
     <ClCompile Include="objects.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="rail.cpp" />

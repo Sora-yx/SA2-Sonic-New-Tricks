@@ -23,6 +23,7 @@ extern "C" {
 		Init_ObjectsHacks();
 		Init_SonicNewTricks();
 		Init_ActionRemap();
+		Init_JumpBall();
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame() {

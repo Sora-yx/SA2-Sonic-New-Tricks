@@ -29,13 +29,6 @@ void Sonic_Main_r(ObjectMaster* obj)
 	CharObj2Base* co2 = MainCharObj2[obj->Data2.Character->PlayerNum];
 	EntityData1* data1 = MainCharObj1[obj->Data2.Character->PlayerNum];
 
-	if (co2 && (co2->CharID2 == Characters_Sonic || co2->CharID2 == Characters_Shadow)) {
-
-		if (data1->Action == Action_Jump && sonicBall)
-		{
-			data1->Status |= Status_Ball;
-		}
-	}
 
 	if (SpinDashSomersault) {
 		//Add somersault physics to spin dash, this is very hacky, but that's how SA2 does it, so... lol.
