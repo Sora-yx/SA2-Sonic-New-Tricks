@@ -25,7 +25,7 @@ signed int Sonic_CheckJump_r(EntityData1* data, CharObj2Base* CO2, SonicCharObj2
 {
     signed int isJump = Sonic_CheckJump_origin(data, CO2, a3);
 
-    if (isJump != 0 && !CO2->HeldObject && CO2->CharID2 <= Characters_Shadow)
+    if (isJump != 0 && data->Action == Action_Jump && CO2->CharID2 <= Characters_Shadow)
     {
         data->Status |= Status_Ball;
     }

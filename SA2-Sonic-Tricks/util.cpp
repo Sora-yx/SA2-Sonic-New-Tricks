@@ -2,10 +2,12 @@
 
 bool isBallForm() {
 
-	if (!SonicCO2PtrExtern || SonicCO2PtrExtern->base.CharID2 != Characters_Sonic)
+	if (!SonicCO2PtrExtern || SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow)
 		return false;
 
-	if (SonicCO2PtrExtern->base.AnimInfo.Current == 30 || SonicCO2PtrExtern->base.AnimInfo.Current == 100 || SonicCO2PtrExtern->base.AnimInfo.Current >= 65 && SonicCO2PtrExtern->base.AnimInfo.Current <= 67)
+	char pnum = SonicCO2PtrExtern->base.PlayerNum;
+
+	if (MainCharObj1[pnum]->Status & Status_Ball && MainCharObj1[pnum]->Action != Action_SpinRelease)
 	{
 		return true;
 	}
@@ -40,7 +42,8 @@ bool isSonicAttacking() {
 	EntityData1* data1 = MainCharObj1[SonicCO2PtrExtern->base.PlayerNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 
+		|| data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
 
 		return true;
 	}
@@ -57,7 +60,8 @@ bool isAttackingBoxes(char pNum) {
 	EntityData1* data1 = MainCharObj1[pNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 
+		|| data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
 
 		return true;
 	}
@@ -79,7 +83,8 @@ bool isAttackingMetalBoxes(char pNum) {
 	if (co2->Upgrades & Upgrades_SonicFlameRing || co2->Upgrades & Upgrades_ShadowFlameRing) {
 
 		if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-			|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 || data1->Action == Action_BounceDown) {
+			|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 
+			|| data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
 
 			return true;
 		}
