@@ -4,6 +4,10 @@ Buttons	LightDashButton = Buttons_Y;
 Buttons BounceButton = Buttons_X;
 Buttons SpinDashButton = Buttons_X;
 Buttons SomersaultButton = Buttons_B;
+Buttons pickButton = Buttons_Y;
+Buttons grabButton = (Buttons)buttons_XB;
+Buttons petButton = (Buttons)buttons_XB;
+Buttons gravityButton = Buttons_Y;
 
 bool sa1dash = true;
 bool sa1speed = true;
@@ -44,7 +48,11 @@ void ReadConfig(const char* path) {
 	LightDashButton = ButtonsList[config->getInt("ActionRemap", "LightDashButton", 2)];
 	BounceButton = ButtonsList[config->getInt("ActionRemap", "BounceButton", 1)];
 	SpinDashButton = ButtonsList[config->getInt("ActionRemap", "SpinDashButton", 1)];
-	SomersaultButton = ButtonsList[config->getInt("ActionRemap", "SomersaultButton", 0)];
+	SomersaultButton = ButtonsList[config->getInt("ActionRemap", "SomersaultButton", 0)];	
+	pickButton = ButtonsList[config->getInt("ActionRemap", "pickButton", 2)];
+	grabButton = ButtonsList[config->getInt("ActionRemap", "grabButton", 3)];
+	petButton = ButtonsList[config->getInt("ActionRemap", "petButton", 3)];
+	gravityButton = ButtonsList[config->getInt("ActionRemap", "gravityButton", 2)];
 
 	delete config;
 

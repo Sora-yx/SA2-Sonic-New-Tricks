@@ -18,14 +18,17 @@ Trampoline* LoadCharacters_t;
 
 Bool __cdecl CheckBreakObject_r(ObjectMaster* obj, ObjectMaster* other)
 {
-	ObjectMaster* col = GetCollidingPlayer(obj);
+	if (obj) {
 
-	if (col)
-	{
-		char pnum = GetPlayerNumber(col);
+		ObjectMaster* col = GetCollidingPlayer(obj);
 
-		if (isAttackingBoxes(pnum))
-			return 1;
+		if (col)
+		{
+			char pnum = GetPlayerNumber(col);
+
+			if (isAttackingBoxes(pnum))
+				return 1;
+		}
 	}
 
 	FunctionPointer(Bool, original, (ObjectMaster * obj, ObjectMaster * other), CheckBreakObject_t->Target());
@@ -37,9 +40,11 @@ void CheckBreakDynamite(ObjectMaster* obj) {
 	EntityData1* data = obj->Data1.Entity;
 
 	if (obj) {
-		if (data->Action == 0 && isSonicAttacking() && GetCollidingPlayer(obj)) {
-			data->Status |= 4u;
-			obj->EntityData2->gap_44[0] = 0;
+		if (data) {
+			if (data->Action == 0 && isSonicAttacking() && GetCollidingPlayer(obj)) {
+				data->Status |= 4u;
+				obj->EntityData2->gap_44[0] = 0;
+			}
 		}
 	}
 
@@ -52,9 +57,11 @@ void CheckBreakDynamiteHiddenBase(ObjectMaster* obj) {
 	EntityData1* data = obj->Data1.Entity;
 
 	if (obj) {
-		if (data->NextAction != 7 && isSonicAttacking() && GetCollidingPlayer(obj)) {
-			data->Timer = 0;
-			data->NextAction = 7;
+		if (data) {
+			if (data->NextAction != 7 && isSonicAttacking() && GetCollidingPlayer(obj)) {
+				data->Timer = 0;
+				data->NextAction = 7;
+			}
 		}
 	}
 
@@ -67,9 +74,11 @@ void CheckBreakDynamiteSandOcean(ObjectMaster* obj) {
 	EntityData1* data = obj->Data1.Entity;
 
 	if (obj) {
-		if (data->Action == 0 && isSonicAttacking() && GetCollidingPlayer(obj)) {
-			data->Status |= 4u;
-			obj->EntityData2->gap_44[0] = 0;
+		if (data) {
+			if (data->Action == 0 && isSonicAttacking() && GetCollidingPlayer(obj)) {
+				data->Status |= 4u;
+				obj->EntityData2->gap_44[0] = 0;
+			}
 		}
 	}
 
@@ -87,13 +96,15 @@ void CheckAndOpenPrisonLaneDoor(ObjectMaster* obj) {
 		if (!isSpeedCharacter())
 			return;
 
-		if (data->Action == 0 && data->Rotation.x == 3)
-		{
-			data->Rotation.x = 32;
-		}
-		else  if (data->Action < 1 && GetCollidingPlayer(obj)) {
-			data->Rotation.x = 3;
-			data->Action = 1;
+		if (data) {
+			if (data->Action == 0 && data->Rotation.x == 3)
+			{
+				data->Rotation.x = 32;
+			}
+			else  if (data->Action < 1 && GetCollidingPlayer(obj)) {
+				data->Rotation.x = 3;
+				data->Action = 1;
+			}
 		}
 	}
 }
@@ -227,7 +238,6 @@ void BrokenDownSmoke_r(ObjectMaster* a1) {
 		origin(a1);
 	}
 }
-
 
 void CheckAndLoad_quickSandDeathAnimation() {
 

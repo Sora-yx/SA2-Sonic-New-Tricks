@@ -2,6 +2,8 @@
 
 //Original Code by SonicFreak94, edited here to let the player change controls of the actions.
 
+uint8_t actionRemapList[5] = { Action_LightDash, Action_PickUp, Action_GrabObject2, Action_Pet, Action_GravitySwitch };
+
 Trampoline* Sonic_CheckActionWindow_t = nullptr;
 Trampoline* Sonic_Somersault_t = nullptr;
 
@@ -20,6 +22,29 @@ static Sint32 __cdecl Sonic_CheckActionWindow_orig(EntityData1* data1, EntityDat
 		mov result, eax
 	}
 	return result;
+}
+
+bool isCustomAction(char action)
+{
+	for (uint8_t i = 0; i < LengthOfArray(actionRemapList); i++)
+	{
+		if (actionRemapList[i] == action)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool isInputPressed(Buttons btn, char pnum)
+{
+	if ((((Controllers[pnum].press & btn) == 0) && btn != buttons_XB) || btn == buttons_XB && !Action_Pressed[pnum])
+	{
+		return false;
+	}
+
+	return true;
 }
 
 static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2)
@@ -51,18 +76,58 @@ static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2*
 			action = co2->ActionWindowItems[0];
 		}
 
-		if (action == Action_LightDash)
+		if (isCustomAction(action))
 		{
 			co2->field_D[1] = action;
 
-			// Just nope right out of here if Light Dash button isn't pressed.
-			if ((((Controllers[pnum].press & LightDashButton) == 0) && LightDashButton != buttons_XB) || LightDashButton == buttons_XB && !Action_Pressed[pnum])
+			switch (action)
 			{
-				return 0;
+			case Action_LightDash:
+				// Just nope right out of here if Light Dash button isn't pressed.
+				if (!isInputPressed(LightDashButton, pnum))
+				{
+					return 0;
+				}
+
+				Sonic_PerformLightDash(sonicCO2, co2, data1);
+				return 1; // Original function returns this value upon light dash.
+			case Action_PickUp:
+				if (!isInputPressed(pickButton, pnum))
+				{
+					return 0;
+				}
+				Sonic_DoPickObject(data1, co2);
+				sonicCO2->SpindashCounter = 0;
+				return 1;
+			case Action_GrabObject2:
+				if (!isInputPressed(grabButton, pnum))
+				{
+					return 0;
+				}
+				data1->Action = Action_GrabObject2;
+				co2->AnimInfo.Next = 43;
+				data1->Status &= ~0x2500u;
+				sonicCO2->SpindashCounter = 0;
+				return 1;
+			case Action_Pet:
+				if (!isInputPressed(petButton, pnum))
+				{
+					return 0;
+				}
+				DoPetChao(co2, data1);
+				return 1;
+			case Action_GravitySwitch:
+				if (!isInputPressed(gravityButton, pnum))
+				{
+					return 0;
+				}
+				data1->Action = Action_GravitySwitch;
+				co2->AnimInfo.Next = 201;
+				sonicCO2->SomersaultTime = 0;
+				sonicCO2->SpindashCounter = 0;
+				return 1;
 			}
 
-			Sonic_PerformLightDash(sonicCO2, co2, data1);
-			return 1; // Original function returns this value upon light dash.
 		}
 	}
 
@@ -515,7 +580,7 @@ void SpinDash_ButtonCheckOnFrames()
 
 void Init_ActionRemap() {
 
-	if (LightDashButton != buttons_XB)
+	if (LightDashButton != buttons_XB || pickButton != buttons_XB)
 		Sonic_CheckActionWindow_t = new Trampoline((int)0x7230E0, (int)0x7230E5, Sonic_CheckActionWindowASM);
 
 	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)

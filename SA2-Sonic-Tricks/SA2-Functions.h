@@ -88,8 +88,6 @@ static inline int sub_7235C0(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a
 	return result;
 }
 
-
-
 static const void* const SonicTexEffectPtr = (void*)0x756AE0;
 static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
 {
@@ -97,5 +95,29 @@ static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
 	{
 		mov edi, [a1]
 		call SonicTexEffectPtr
+	}
+}
+
+
+static const void* const Sonic_DoPickObjectptr = (void*)0x476010;
+static inline void Sonic_DoPickObject(EntityData1* a1, CharObj2Base* a2)
+{
+	__asm
+	{
+		mov ecx, a2
+		mov eax, a1
+		call Sonic_DoPickObjectptr
+	}
+}
+
+
+static const void* const DoPetChaoptr = (void*)0x4762A0;
+static inline void DoPetChao(CharObj2Base* a1, EntityData1* a2)
+{
+	__asm
+	{
+		mov ecx, a2
+		mov eax, a1
+		call DoPetChao
 	}
 }
