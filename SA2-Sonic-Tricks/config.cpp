@@ -29,7 +29,6 @@ static const Buttons ButtonsList[]
 };
 
 void ReadConfig(const char* path) {
-
 	const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 	sa1dash = config->getBool("General", "sa1dash", true);
 	sa1speed = config->getBool("General", "sa1speed", true);
@@ -48,7 +47,7 @@ void ReadConfig(const char* path) {
 	LightDashButton = ButtonsList[config->getInt("ActionRemap", "LightDashButton", 2)];
 	BounceButton = ButtonsList[config->getInt("ActionRemap", "BounceButton", 1)];
 	SpinDashButton = ButtonsList[config->getInt("ActionRemap", "SpinDashButton", 1)];
-	SomersaultButton = ButtonsList[config->getInt("ActionRemap", "SomersaultButton", 0)];	
+	SomersaultButton = ButtonsList[config->getInt("ActionRemap", "SomersaultButton", 0)];
 	pickButton = ButtonsList[config->getInt("ActionRemap", "pickButton", 2)];
 	grabButton = ButtonsList[config->getInt("ActionRemap", "grabButton", 3)];
 	petButton = ButtonsList[config->getInt("ActionRemap", "petButton", 3)];

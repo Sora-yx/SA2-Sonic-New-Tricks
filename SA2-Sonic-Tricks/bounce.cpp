@@ -1,14 +1,13 @@
 #include "stdafx.h"
 
-float bounceSpeed = 4.0000001;
-float bounceSpeed2 = 4.5999999;
+float bounceSpeed = 4.0000001f;
+float bounceSpeed2 = 4.5999999f;
 
 float* bouncespeedPtr = &bounceSpeed;
 float* bouncespeed2Ptr = &bounceSpeed2;
 
 signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a3)
 {
-
 	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
 		return 0;
 
@@ -34,16 +33,13 @@ static void __declspec(naked) Sonic_CheckBounceAttackASM()
 {
 	__asm
 	{
-		push[esp + 04h] // a3
-		push ecx // a2
-		push eax // a1
-
-		// Call your __cdecl function here:
+		push[esp + 04h]
+		push ecx
+		push eax
 		call Sonic_CheckBounceAttack_r
-
-		add esp, 4 // a1<eax> is also used for return value
-		pop ecx // a2
-		add esp, 4 // a3
+		add esp, 4
+		pop ecx
+		add esp, 4
 		retn
 	}
 }
@@ -71,21 +67,16 @@ static void __declspec(naked) Sonic_PerformBounceASM()
 {
 	__asm
 	{
-		push ecx // a2
-		push eax // a1
-
-		// Call your __cdecl function here:
+		push ecx
+		push eax
 		call Sonic_PerformBounce_r
-
-		add esp, 4 // a1<eax> is also used for return value
-		pop ecx // a2
+		add esp, 4
+		pop ecx
 		retn
 	}
 }
 
-
 void Init_Bounce() {
-
 	if (superBounce)
 	{
 		WriteData((float**)0x71b0da, bouncespeedPtr);

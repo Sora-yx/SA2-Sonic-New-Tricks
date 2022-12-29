@@ -98,7 +98,6 @@ static inline void DoSonicTextureEffectStuff(ObjectMaster* a1)
 	}
 }
 
-
 static const void* const Sonic_DoPickObjectptr = (void*)0x476010;
 static inline void Sonic_DoPickObject(EntityData1* a1, CharObj2Base* a2)
 {
@@ -110,7 +109,6 @@ static inline void Sonic_DoPickObject(EntityData1* a1, CharObj2Base* a2)
 	}
 }
 
-
 static const void* const DoPetChaoptr = (void*)0x4762A0;
 static inline void DoPetChao(CharObj2Base* a1, EntityData1* a2)
 {
@@ -121,3 +119,5 @@ static inline void DoPetChao(CharObj2Base* a1, EntityData1* a2)
 		call DoPetChao
 	}
 }
+
+FunctionPointer(void, Sonic_runsActions, (EntityData1* a1, EntityData2* a2, CharObj2Base* a3, SonicCharObj2* a5), 0x719920);

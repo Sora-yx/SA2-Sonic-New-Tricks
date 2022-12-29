@@ -1,8 +1,20 @@
 #include "stdafx.h"
 
-bool isBallForm() {
+bool isSpeedCharacter() {
+	if (SonicCO2PtrExtern) {
+		CharObj2Base* co2 = &SonicCO2PtrExtern->base;
 
-	if (!SonicCO2PtrExtern || SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow)
+		if (co2) {
+			if (SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow || SonicCO2PtrExtern->base.CharID2 == Characters_MetalSonic || SonicCO2PtrExtern->base.CharID2 == Characters_Amy)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool isBallForm() {
+	if (!isSpeedCharacter())
 		return false;
 
 	char pnum = SonicCO2PtrExtern->base.PlayerNum;
@@ -16,53 +28,42 @@ bool isBallForm() {
 }
 
 bool CheckChara() {
-
-	if ((SonicCO2PtrExtern && SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && sonicBall))
-		return true;
-
-	return false;
-}
-
-bool isSpeedCharacter() {
-
 	if (SonicCO2PtrExtern) {
+		CharObj2Base* co2 = &SonicCO2PtrExtern->base;
 
-		if (SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow || SonicCO2PtrExtern->base.CharID2 == Characters_MetalSonic || SonicCO2PtrExtern->base.CharID2 == Characters_Amy)
-			return true;
+		if (co2) {
+			if (SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && sonicBall)
+				return true;
+		}
 	}
 
 	return false;
 }
 
 bool isSonicAttacking() {
-
 	if (!isSpeedCharacter())
 		return false;
 
 	EntityData1* data1 = MainCharObj1[SonicCO2PtrExtern->base.PlayerNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_Jump || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1
 		|| data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
-
 		return true;
 	}
-
 
 	return false;
 }
 
 bool isAttackingBoxes(char pNum) {
-
 	if (!isSpeedCharacter())
 		return false;
 
 	EntityData1* data1 = MainCharObj1[pNum];
 
 	if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 
+		|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1
 		|| data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
-
 		return true;
 	}
 
@@ -70,7 +71,6 @@ bool isAttackingBoxes(char pNum) {
 }
 
 bool isAttackingMetalBoxes(char pNum) {
-
 	if (!isSpeedCharacter())
 		return false;
 
@@ -81,11 +81,9 @@ bool isAttackingMetalBoxes(char pNum) {
 		return false;
 
 	if (co2->Upgrades & Upgrades_SonicFlameRing || co2->Upgrades & Upgrades_ShadowFlameRing) {
-
 		if (data1->Action == Action_SpinRelease || data1->Action == Action_SpinCharge || data1->Action == Action_HomingAttack
-			|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1 
+			|| data1->Action >= Action_Somersault1 && data1->Action <= Action_MovingSomersault1
 			|| data1->Action == Action_BounceDown || data1->Action == Action_BounceUp) {
-
 			return true;
 		}
 	}
@@ -115,7 +113,6 @@ bool isBlackShield() {
 	return GetModuleHandle(L"DisableBlackShield") != NULL;
 }
 
-
 bool isSS() {
 	return GetModuleHandle(L"SA2-Super-Sonic") != NULL;
 }
@@ -140,4 +137,16 @@ float GetDistance(NJS_VECTOR* orig, NJS_VECTOR* dest) {
 
 bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius) {
 	return GetDistance(center, pos) <= radius;
+}
+
+bool isAttackingKBB() {
+	EntityData1* data1 = MainCharObj1[0];
+
+	if (!data1)
+		return false;
+
+	if (isSonicAttacking() || data1->Action == Action_Jump || data1->Action == Action_MechlessAttack || data1->Action == 95)
+		return true;
+
+	return false;
 }

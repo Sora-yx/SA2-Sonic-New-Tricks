@@ -11,9 +11,7 @@ NJS_VECTOR GetPathPosition(NJS_VECTOR* orig, NJS_VECTOR* dest, float state) {
 	return result;
 }
 
-
 void RailPath_SwapRail(CharObj2Base* co2, EntityData1* PlayerEntity, LoopHead* loophead) {
-
 	if (!co2)
 		return;
 
@@ -44,7 +42,6 @@ void RailPath_SwapRail(CharObj2Base* co2, EntityData1* PlayerEntity, LoopHead* l
 			LoopPoint* NextPoint = &loophead->Points[point + 1];
 
 			for (float state = 0; state <= 1; state += 0.01f) {
-
 				NJS_VECTOR center = GetPathPosition(&loopPoint->Position, &NextPoint->Position, state);
 
 				if (!IsPointInsideSphere(&center, &CheckPos, 20))
@@ -57,4 +54,3 @@ void RailPath_SwapRail(CharObj2Base* co2, EntityData1* PlayerEntity, LoopHead* l
 		}
 	}
 }
-

@@ -1,28 +1,9 @@
 #include "stdafx.h"
 
-//Original Code by SonicFreak94, edited here to let the player change controls of the actions.
-
 uint8_t actionRemapList[5] = { Action_LightDash, Action_PickUp, Action_GrabObject2, Action_Pet, Action_GravitySwitch };
 
-Trampoline* Sonic_CheckActionWindow_t = nullptr;
-Trampoline* Sonic_Somersault_t = nullptr;
-
-static Sint32 __cdecl Sonic_CheckActionWindow_orig(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2)
-{
-	auto target = Sonic_CheckActionWindow_t->Target();
-	Sint32 result;
-	__asm
-	{
-		push[sonicCO2]
-		mov ecx, [co2]
-		mov edx, [data2]
-		mov eax, [data1]
-		call target
-		add esp, 4
-		mov result, eax
-	}
-	return result;
-}
+static UsercallFunc(signed int, Sonic_CheckActionWindow_t, (EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2), (data1, data2, co2, sonicCO2), 0x7230E0, rEAX, rEAX, rEDX, rECX, stack4);
+static UsercallFunc(signed int, Sonic_Somersault_t, (SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2), (sonicCO2, data, co2), 0x723880, rEAX, rEAX, stack4, stack4);
 
 bool isCustomAction(char action)
 {
@@ -49,7 +30,6 @@ bool isInputPressed(Buttons btn, char pnum)
 
 static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2)
 {
-
 	// This code is based on the pseudocode of the original function
 	int  pnum = co2->PlayerNum;
 	char action = co2->field_D[0];
@@ -127,55 +107,14 @@ static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2*
 				sonicCO2->SpindashCounter = 0;
 				return 1;
 			}
-
 		}
 	}
 
 	// If all those conditions fail, let the original code handle it.
-	return Sonic_CheckActionWindow_orig(data1, data2, co2, sonicCO2);
-}
-
-static void __declspec(naked) Sonic_CheckActionWindowASM()
-{
-	__asm
-	{
-		push[esp + 04h] // a4
-		push ecx // a3
-		push edx // a2
-		push eax // a1
-
-		// Call your __cdecl function here:
-		call Sonic_CheckActionWindow_r
-
-		add esp, 4 // a1<eax> is also used for return value
-		pop edx // a2
-		pop ecx // a3
-		add esp, 4 // a4
-		retn
-	}
-}
-
-//Ready??? Let's go, enjoy the giant mess!!!!!
-
-static Sint32 __cdecl Sonic_Somersault_orig(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2)
-{
-	auto target2 = Sonic_Somersault_t->Target();
-
-	Sint32 result;
-	__asm
-	{
-		push[co2]
-		push[data]
-		mov eax, [sonicCO2]
-		call target2
-		add esp, 8
-		mov result, eax
-	}
-	return result;
+	return Sonic_CheckActionWindow_t.Original(data1, data2, co2, sonicCO2);
 }
 
 void SomersaultFinish(CharObj2Base* co2, SonicCharObj2* sonicCO2, EntityData1* data, float getSpd) {
-
 	if (!isHedgePannel())
 		co2->Speed.x = getSpd;
 
@@ -222,9 +161,7 @@ void SomersaultFinish2(CharObj2Base* co2, SonicCharObj2* sonicCO2) {
 	return;
 }
 
-
 int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2, char oldAction, char nextAction, int flagCol) {
-
 	char pnum = co2->PlayerNum;
 
 	bool isSomersaultPressed = (SomersaultButton != buttons_XB && ((Controllers[pnum].press & SomersaultButton)));
@@ -257,10 +194,8 @@ int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2
 }
 
 void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* data) {
-
 	int curFlag;
 	int charID = co2->CharID2;
-
 	if (co2->PhysData.RunSpeed < (double)co2->Speed.x)
 	{
 		Sonic_DoObstacleSomersault(data, sonicCO2, co2);
@@ -299,7 +234,6 @@ void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* da
 	{
 		curFlag = 0x3000;
 	}
-
 	Play3DSound_Pos(curFlag, &data->Position, 0, 0, 127);
 	VibeThing(0, 15, co2->PlayerNum, 6);
 	sonicCO2->SpindashCounter = 0;
@@ -308,19 +242,18 @@ void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* da
 //This actually also manage the spin dash
 signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2)
 {
-	signed int result; 
-	CollisionInfo* col; 
-	int flagCol; 
-	int pNum; 
+	signed int result;
+	CollisionInfo* col;
+	int flagCol;
 	char somerSaultNextAction;
-	char getSomersaultNextAction; 
+	char getSomersaultNextAction;
 	char SomersaultNextAct;
 
-	double getSpd; 
+	double getSpd;
 	char getSomersaultNextAction2;
-	int pnum; 
-	__int16 spinDashCount; 
-	__int16 timer; 
+	int pnum;
+	__int16 spinDashCount;
+	__int16 timer;
 	__int16 status = data->Status;
 
 	if ((status & Status_HoldObject) != 0)
@@ -429,7 +362,6 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		getSomersaultNextAction = sonicCO2->SomersaultNextAction;
 		data->Action = getSomersaultNextAction;
 
-
 		if (getSomersaultNextAction == Action_SomersaultFinish)
 		{
 			sub_7235C0(co2, data, sonicCO2);
@@ -530,22 +462,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 	}
 
 	// If all those conditions fail, let the original code handle it.
-	return Sonic_Somersault_orig(sonicCO2, data, co2);
-}
-
-static void __declspec(naked) Sonic_SomersaultASM()
-{
-	__asm
-	{
-		push[esp + 08h] // co2
-		push[esp + 08h] // data
-		push eax // sonicCO2
-		call Sonic_Somersault_r
-		add esp, 4 // sonicCO2<eax> is also used for return value
-		add esp, 4 // data
-		add esp, 4 // co2
-		retn
-	}
+	return Sonic_Somersault_t.Original(sonicCO2, data, co2);
 }
 
 char SpinDash_Held[2];
@@ -579,12 +496,11 @@ void SpinDash_ButtonCheckOnFrames()
 }
 
 void Init_ActionRemap() {
-
 	if (LightDashButton != buttons_XB || pickButton != buttons_XB)
-		Sonic_CheckActionWindow_t = new Trampoline((int)0x7230E0, (int)0x7230E5, Sonic_CheckActionWindowASM);
+		Sonic_CheckActionWindow_t.Hook(Sonic_CheckActionWindow_r);
 
 	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
-		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
+		Sonic_Somersault_t.Hook(Sonic_Somersault_r);
 
 	if (SpinDashButton != buttons_XB) {
 		WriteData((char**)0x725e68, SpinDash_Released);
@@ -593,7 +509,7 @@ void Init_ActionRemap() {
 
 	if (SpinDashButton == Buttons_Y)
 	{
-		//release spin dash from XB (0x402 = 1026) to Y (0x200 = 502) 
+		//release spin dash from XB (0x402 = 1026) to Y (0x200 = 502)
 		WriteData<1>((int*)0x71a0fb, 0x2);
 		WriteData<1>((int*)0x71a0fa, 0x0);
 	}

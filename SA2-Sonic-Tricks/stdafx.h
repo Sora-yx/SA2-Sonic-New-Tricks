@@ -13,3 +13,5 @@
 #include "IniFile.hpp"
 #include "Util.h"
 #include "AnimationFile.h"
+#include "FunctionHook.h"
+#include "UsercallFunctionHandler.h"
