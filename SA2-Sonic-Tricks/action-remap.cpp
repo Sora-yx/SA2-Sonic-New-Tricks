@@ -80,7 +80,7 @@ static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2*
 				sonicCO2->SpindashCounter = 0;
 				return 1;
 			case Action_PutDown:
-				if (!isInputPressed(pickButton, pnum))
+				if (!isInputPressed(putButton, pnum))
 				{
 					return 0;
 				}
