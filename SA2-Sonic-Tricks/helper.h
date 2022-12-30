@@ -9,6 +9,8 @@ extern bool shGrunt;
 extern bool amyGrunt;
 extern bool superBounce;
 extern bool shBounce;
+extern bool allowSpinDashMS;
+extern bool removeBlackShieldLimit;
 
 void Init_SonicNewTricks();
 void Init_ObjectsHacks();

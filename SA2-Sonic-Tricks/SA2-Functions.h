@@ -133,4 +133,31 @@ static inline void PutDownObj(CharObj2Base* a1, EntityData2* a2, EntityData1* a3
 	}
 }
 
+//void __usercall Sonic_BlackShield(EntityData1 *data@<eax>, CharObj2Base *co2@<esi>, SonicCharObj2 *a3)
+static const void* const MetalSonic_BlackShieldPtr = (void*)0x723730;
+static inline void MetalSonic_BlackShield(EntityData1* a1, CharObj2Base* a2, SonicCharObj2* a3)
+{
+	__asm
+	{
+		push[a3]
+		mov esi, a2
+		mov eax, a1
+		call MetalSonic_BlackShieldPtr
+		add esp, 4
+	}
+}
+
+//void __usercall PGetGravity(EntityData1 *a1@<ecx>, EntityData2 *eax0@<eax>, CharObj2Base *a3@<ebx>)
+static const void* const PGetGravityptr = (void*)0x45F9E0;
+static inline void PGetGravity(EntityData1* a1, EntityData2* a2, CharObj2Base* a3)
+{
+	__asm
+	{
+		mov ebx, a3
+		mov eax, a2
+		mov ecx, a1
+		call PGetGravityptr
+	}
+}
+
 FunctionPointer(void, Sonic_runsActions, (EntityData1* a1, EntityData2* a2, CharObj2Base* a3, SonicCharObj2* a5), 0x719920);

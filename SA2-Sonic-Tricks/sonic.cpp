@@ -27,6 +27,7 @@ void Sonic_Main_r(ObjectMaster* obj)
 		CharObj2Base* co2 = MainCharObj2[obj->Data2.Character->PlayerNum];
 		EntityData1* data1 = MainCharObj1[obj->Data2.Character->PlayerNum];
 		SonicCharObj2* sCO2 = (SonicCharObj2*)obj->Data2.Undefined;
+		EntityData2* data2 = (EntityData2*)obj->EntityData2;
 
 		if (SpinDashSomersault)
 		{
@@ -38,6 +39,24 @@ void Sonic_Main_r(ObjectMaster* obj)
 			else
 			{
 				RestorePhysic(co2);
+			}
+		}
+
+		if (removeBlackShieldLimit && data1->Action == 87 && co2->CharID2 == Characters_MetalSonic)
+		{
+			PGetAcceleration(data1, data2, co2);
+			PResetAngle(data1, co2);
+			if ( (data1->Status & 3) == 0)
+				PGetGravity(data1, data2, co2);
+			PGetSpeed(data1, co2, data2);
+			if (PSetPosition(data1, data2, co2) == 2)
+			{
+				co2->Speed.x = -co2->Speed.x;
+				co2->Speed.z = -co2->Speed.z;
+			}
+			else
+			{
+				PResetPosition(data1, data2, co2);
 			}
 		}
 	}
@@ -77,6 +96,14 @@ void Init_SonicNewTricks() {
 
 	if (SpinDashSomersault) {
 		WriteData<48>((int*)0x717a75, 0x90); //remove "restore physics" every frame, we will manually do it.
-		Sonic_Exec_t.Hook(Sonic_Main_r);
 	}
+
+	if (removeBlackShieldLimit)
+	{
+		WriteData<9>((int*)0x72377A, 0x90);
+		WriteJump((void*)0x718C63, (void*)0x719459);
+	}
+
+	if (SpinDashSomersault || removeBlackShieldLimit)
+		Sonic_Exec_t.Hook(Sonic_Main_r);
 }

@@ -20,7 +20,7 @@ extern Buttons grabButton;
 extern Buttons petButton;
 extern Buttons gravityButton;
 extern Buttons putButton;
-
+extern Buttons BlackShieldButton;
 void Init_JumpBall();
 
 const uint8_t playerMAX = 2;

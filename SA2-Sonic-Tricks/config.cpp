@@ -9,6 +9,7 @@ Buttons putButton = (Buttons)buttons_XB;
 Buttons grabButton = (Buttons)buttons_XB;
 Buttons petButton = Buttons_Y;
 Buttons gravityButton = Buttons_Y;
+Buttons BlackShieldButton = Buttons_Y;
 
 bool sa1dash = true;
 bool sa1speed = true;
@@ -20,6 +21,8 @@ bool amyGrunt = false;
 bool superBounce = true;
 bool shBounce = true;
 bool SpinDashSomersault = false;
+bool allowSpinDashMS = true;
+bool removeBlackShieldLimit = true;
 
 static const Buttons ButtonsList[]
 {
@@ -45,6 +48,9 @@ void ReadConfig(const char* path) {
 
 	amyGrunt = config->getBool("Amy", "amyGrunt", false);
 
+	allowSpinDashMS = config->getBool("MS", "spindashMS", true);
+	removeBlackShieldLimit = config->getBool("MS", "bsLimit", true);
+
 	LightDashButton = ButtonsList[config->getInt("ActionRemap", "LightDashButton", 2)];
 	BounceButton = ButtonsList[config->getInt("ActionRemap", "BounceButton", 1)];
 	SpinDashButton = ButtonsList[config->getInt("ActionRemap", "SpinDashButton", 1)];
@@ -54,6 +60,9 @@ void ReadConfig(const char* path) {
 	grabButton = ButtonsList[config->getInt("ActionRemap", "grabButton", 3)];
 	petButton = ButtonsList[config->getInt("ActionRemap", "petButton", 2)];
 	gravityButton = ButtonsList[config->getInt("ActionRemap", "gravityButton", 2)];
+	BlackShieldButton = ButtonsList[config->getInt("ActionRemap", "shieldButton", 2)];
+
+
 
 	delete config;
 

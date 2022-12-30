@@ -28,6 +28,16 @@ bool isInputPressed(Buttons btn, char pnum)
 	return true;
 }
 
+bool isInputHeld(Buttons btn, char pnum)
+{
+	if ((((Controllers[pnum].on & btn) == 0) && btn != buttons_XB) || btn == buttons_XB && !Action_Held[pnum])
+	{
+		return false;
+	}
+
+	return true;
+}
+
 static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2)
 {
 	// This code is based on the pseudocode of the original function
@@ -455,7 +465,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 				}
 				else
 				{
-					if (co2->CharID2 <= Characters_Shadow || isAmySpinDash())
+					if (co2->CharID2 <= Characters_Shadow || isAmySpinDash() || co2->CharID2 == Characters_MetalSonic && allowSpinDashMS)
 					{
 						Sonic_StartSpindash(data, co2, sonicCO2);
 					}
@@ -478,7 +488,11 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 			ResetSomersault(sonicCO2, co2, data);
 			return 1;
 		}
-		sonicCO2->SpindashCounter = 0;
+		if (co2->CharID2 != Characters_MetalSonic || !isInputHeld(BlackShieldButton, pnum))
+			sonicCO2->SpindashCounter = 0;
+		else
+			return 0;
+
 		if (data->Action == Action_SomersaultFinish)
 		{
 			data->Status &= ~Status_Attack;
@@ -495,7 +509,7 @@ char SpinDash_Released[2] = { 0 };
 void SpinDash_ButtonCheckOnFrames()
 {
 
-	for (uint8_t i = 0; i < 2; i++)
+	for (uint8_t i = 0; i < playerMAX; i++)
 	{
 		if (Controllers[i].on & SpinDashButton)
 		{
@@ -532,7 +546,7 @@ void Pet_ButtonCheckOnFrames()
 		WriteData((char**)0x4758D4, Pet_Held);
 	}
 
-	for (uint8_t i = 0; i < 2; i++)
+	for (uint8_t i = 0; i < playerMAX; i++)
 	{
 		if (Controllers[i].on & petButton)
 		{
@@ -545,6 +559,22 @@ void Pet_ButtonCheckOnFrames()
 	}
 }
 
+char BlackShield_Held[2] = { 0 };
+void BlackShield_ButtonCheckOnFrames()
+{
+	for (uint8_t i = 0; i < playerMAX; i++)
+	{
+		if (Controllers[i].on & BlackShieldButton)
+		{
+			BlackShield_Held[i] = 1;
+		}
+		else
+		{
+			BlackShield_Held[i] = 0;
+		}
+	}
+}
+
 void Buttons_CheckOnFrames()
 {
 	if (GameState != GameStates_Ingame)
@@ -552,6 +582,7 @@ void Buttons_CheckOnFrames()
 
 	SpinDash_ButtonCheckOnFrames();
 	Pet_ButtonCheckOnFrames();
+	BlackShield_ButtonCheckOnFrames();
 }
 
 static void __declspec(naked) Sonic_SomersaultASM()
@@ -569,6 +600,93 @@ static void __declspec(naked) Sonic_SomersaultASM()
 	}
 }
 
+//patch MS Black Shield since instant spin dash break it
+signed int MetalSonic_CheckBlackShield_r(EntityData1* data, CharObj2Base* co2, SonicCharObj2* sCO2)
+{
+	auto pnum = co2->PlayerNum;
+	__int16 v6;
+	__int16 v7;
+
+	if ((data->Status & Status_HoldObject) != 0)
+	{
+		sCO2->SpindashCounter = 0;
+		return 0;
+	}
+	else
+	{
+		if (isInputHeld(BlackShieldButton, pnum))
+		{
+			if (sCO2->SpindashCounter < 24)
+				sCO2->SpindashCounter++;
+		}
+
+		switch (data->Action)
+		{
+		case 0:
+		case 1:
+			if (!isInputHeld(BlackShieldButton, pnum) || sCO2->SpindashCounter < 24 && !removeBlackShieldLimit || removeBlackShieldLimit && sCO2->SpindashCounter < 3)
+			{
+				return 0;
+			}
+			MetalSonic_BlackShield(data, co2, sCO2);
+			*(WORD*)sCO2->field_36A = 0;
+			return 1;
+		case 6:
+		case 7:
+		case 9:
+		case 10:
+		case 17:
+
+			if (isInputPressed(BlackShieldButton, pnum))
+			{
+				*(WORD*)sCO2->field_36A = 1;
+				return 0;
+			}
+			else
+			{
+				if (!isInputHeld(BlackShieldButton, pnum))
+				{
+					return 0;
+				}
+				v6 = *(WORD*)sCO2->field_36A;
+				if (v6 < 1)
+				{
+					return 0;
+				}
+				v7 = v6 + 1;
+				*(WORD*)sCO2->field_36A = v7;
+				if (v7 <= 2)
+				{
+					return 0;
+				}
+				MetalSonic_BlackShield(data, co2, sCO2);
+				*(WORD*)sCO2->field_36A = 0;
+				return 1;
+			}
+			break;
+		default:
+			*(WORD*)sCO2->field_36A = 0;
+
+		}
+	}
+	return 0;
+}
+
+static void __declspec(naked) MetalSonic_CheckBlackShieldASM()
+{
+	__asm
+	{
+		push edi 
+		push ecx 
+		push eax 
+		call MetalSonic_CheckBlackShield_r
+		add esp, 4 
+		pop ecx
+		pop edi
+		retn
+	}
+}
+
 void Init_ActionRemap() {
 
 	if (LightDashButton != buttons_XB || pickButton != buttons_XB || petButton != buttons_XB || grabButton != buttons_XB
@@ -577,8 +695,16 @@ void Init_ActionRemap() {
 		Sonic_CheckActionWindow_t.Hook(Sonic_CheckActionWindow_r);
 	}
 
-	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
+	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB || allowSpinDashMS || BlackShieldButton != buttons_XB)
+	{
 		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
+		WriteJump((void*)0x723790, MetalSonic_CheckBlackShieldASM); //patch MS blackshield
+	}
+
+	if (BlackShieldButton != buttons_XB)
+	{
+		WriteData((char**)0x71C42D, BlackShield_Held);
+	}
 
 	if (SpinDashButton != buttons_XB) {
 		WriteData((char**)0x725e68, SpinDash_Released);
