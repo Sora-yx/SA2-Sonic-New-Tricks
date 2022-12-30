@@ -2,11 +2,20 @@
 
 HelperFunctions HelperFunctionsGlobal;
 const char* error = "[Sonic New Tricks]: WARNING: Your version of the Mod Loader is old, the mod won't work properly.\nPlease update your Mod Loader for the best experience.";
+const char* error2 = "WARNING: Action Remap is not compatible with Sonic New Tricks.This mod already allow you to change Sonic actions.";
 
 extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		Sleep(10);
+
+		HMODULE ActionRemap = GetModuleHandle(L"sa2-action-remap");
+
+		if (ActionRemap)
+		{
+			PrintDebug(error2);
+			MessageBoxA(MainWindowHandle, error2, "Sonic New Tricks Mod", MB_ICONWARNING);
+		}
 
 		HelperFunctionsGlobal = helperFunctions;
 

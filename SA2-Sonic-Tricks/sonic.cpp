@@ -127,6 +127,13 @@ void Init_SonicNewTricks() {
 		WriteCall((void*)0x720A59, FixUpgradeDisplay2);
 		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
 
+		//make sonic still spinning while falling with the jump ball
+		SonicAnimList[67] = SonicAnimList[66];
+		SonicAnimList[67].NextAnimation = 68;
+		SonicAnimList[68] = SonicAnimList[66];
+		SonicAnimList[68].NextAnimation = 68;
+
+
 		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
 	}
 
