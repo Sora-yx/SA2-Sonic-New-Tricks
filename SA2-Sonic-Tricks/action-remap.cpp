@@ -307,7 +307,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		{
 			return 0;
 		}
-		if (data->Position.y + 5.0 >= co2->SurfaceInfo.TopSurfaceDist
+		if (data->Position.y + 5.0f >= co2->SurfaceInfo.TopSurfaceDist
 			&& (co2->SurfaceInfo.TopSurface & (SurfaceFlag_WaterNoAlpha | SurfaceFlag_Water)) == 0)
 		{
 			SomersaultFinish2(co2, sonicCO2);
@@ -352,8 +352,6 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		getSpd = 2.5f;
 		SomersaultFinish(co2, sonicCO2, data, getSpd);
 		return 1;
-
-
 	case Action_Somersault2:
 		break;
 	case Action_MovingSomersault1:
