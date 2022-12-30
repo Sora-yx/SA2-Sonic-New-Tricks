@@ -89,7 +89,7 @@ static void __declspec(naked) DoSonicTextureEffectStuffASM()
 
 void __cdecl Sonic_runsActions_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* SonicCO2)
 {
-	if (data1->Action == 86)
+	if (data1->Action == 86) //turtle
 	{
 		if (Sonic_CheckNextAction(SonicCO2, data1, data2, co2))
 		{

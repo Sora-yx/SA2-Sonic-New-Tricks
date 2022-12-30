@@ -329,7 +329,30 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		return 1;
 	case Action_MechPunch: //idk
 
-		break;
+		if (Somersault_ApplyChanges(sonicCO2, data, co2, Action_Somersault2, Action_SomersaultFinish, flagCol))
+			return 1;
+
+		if ((co2->AnimInfo.field_C & 2) == 0)
+		{
+			return 0;
+		}
+		if (data->Position.y + 5.0f >= co2->SurfaceInfo.TopSurfaceDist
+			&& (co2->SurfaceInfo.TopSurface & (SurfaceFlag_WaterNoAlpha | SurfaceFlag_Water)) == 0)
+		{
+			SomersaultFinish2(co2, sonicCO2);
+			return 0;
+		}
+		getSomersaultNextAction2 = sonicCO2->SomersaultNextAction;
+		data->Action = getSomersaultNextAction2;
+		if (getSomersaultNextAction2 != Action_Somersault2)
+		{
+			sub_7235C0(co2, data, sonicCO2);
+			return 1;
+		}
+		getSpd = 2.5f;
+		SomersaultFinish(co2, sonicCO2, data, getSpd);
+		return 1;
+
 
 	case Action_Somersault2:
 		break;
