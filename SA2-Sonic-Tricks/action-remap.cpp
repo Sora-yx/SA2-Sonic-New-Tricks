@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-uint8_t actionRemapList[5] = { Action_LightDash, Action_PickUp, Action_GrabObject2, Action_Pet, Action_GravitySwitch };
+uint8_t actionRemapList[] = { Action_LightDash, Action_PickUp, Action_PutDown, Action_GrabObject2, Action_Pet, Action_GravitySwitch };
 
 static UsercallFunc(signed int, Sonic_CheckActionWindow_t, (EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2), (data1, data2, co2, sonicCO2), 0x7230E0, rEAX, rEAX, rEDX, rECX, stack4);
 Trampoline* Sonic_Somersault_t = nullptr; //Can't funchook this for some reason
@@ -77,6 +77,14 @@ static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2*
 					return 0;
 				}
 				Sonic_DoPickObject(data1, co2);
+				sonicCO2->SpindashCounter = 0;
+				return 1;
+			case Action_PutDown:
+				if (!isInputPressed(pickButton, pnum))
+				{
+					return 0;
+				}
+				PutDownObj(co2, data2, data1);
 				sonicCO2->SpindashCounter = 0;
 				return 1;
 			case Action_GrabObject2:
@@ -481,13 +489,11 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 	return Sonic_Somersault_orig(sonicCO2, data, co2);
 }
 
-char SpinDash_Held[2];
-char SpinDash_Released[2];
+char SpinDash_Held[2] = { 0 };
+char SpinDash_Released[2] = { 0 };
 
 void SpinDash_ButtonCheckOnFrames()
 {
-	if (GameState != GameStates_Ingame)
-		return;
 
 	for (uint8_t i = 0; i < 2; i++)
 	{
@@ -511,6 +517,43 @@ void SpinDash_ButtonCheckOnFrames()
 	}
 }
 
+char Pet_Held[2] = { 0 };
+void Pet_ButtonCheckOnFrames()
+{
+	if (petButton == buttons_XB)
+		return;
+
+	if (CurrentCharacter > Characters_Shadow)
+	{
+		WriteData((char**)0x4758D4, &Action_Held);
+	}
+	else
+	{
+		WriteData((char**)0x4758D4, Pet_Held);
+	}
+
+	for (uint8_t i = 0; i < 2; i++)
+	{
+		if (Controllers[i].on & petButton)
+		{
+			Pet_Held[i] = 1;
+		}
+		else
+		{
+			Pet_Held[i] = 0;
+		}
+	}
+}
+
+void Buttons_CheckOnFrames()
+{
+	if (GameState != GameStates_Ingame)
+		return;
+
+	SpinDash_ButtonCheckOnFrames();
+	Pet_ButtonCheckOnFrames();
+}
+
 static void __declspec(naked) Sonic_SomersaultASM()
 {
 	__asm
@@ -527,8 +570,12 @@ static void __declspec(naked) Sonic_SomersaultASM()
 }
 
 void Init_ActionRemap() {
-	if (LightDashButton != buttons_XB || pickButton != buttons_XB)
+
+	if (LightDashButton != buttons_XB || pickButton != buttons_XB || petButton != buttons_XB || grabButton != buttons_XB
+		|| gravityButton != buttons_XB || putButton != buttons_XB)
+	{
 		Sonic_CheckActionWindow_t.Hook(Sonic_CheckActionWindow_r);
+	}
 
 	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
 		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
@@ -538,12 +585,15 @@ void Init_ActionRemap() {
 		WriteData((char**)0x7251b8, SpinDash_Held);
 	}
 
+	if (petButton != buttons_XB)
+	{
+		WriteData((char**)0x4758D4, Pet_Held);
+	}
+
 	if (SpinDashButton == Buttons_Y)
 	{
 		//release spin dash from XB (0x402 = 1026) to Y (0x200 = 502)
 		WriteData<1>((int*)0x71a0fb, 0x2);
 		WriteData<1>((int*)0x71a0fa, 0x0);
 	}
-
-	return;
 }

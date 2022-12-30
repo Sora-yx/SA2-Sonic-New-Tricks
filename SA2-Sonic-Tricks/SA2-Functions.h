@@ -120,4 +120,17 @@ static inline void DoPetChao(CharObj2Base* a1, EntityData1* a2)
 	}
 }
 
+
+static const void* const PutDownObjPtr = (void*)0x476140;
+static inline void PutDownObj(CharObj2Base* a1, EntityData2* a2, EntityData1* a3)
+{
+	__asm
+	{
+		mov ecx, a3
+		mov edx, a2
+		mov eax, a1
+		call PutDownObjPtr
+	}
+}
+
 FunctionPointer(void, Sonic_runsActions, (EntityData1* a1, EntityData2* a2, CharObj2Base* a3, SonicCharObj2* a5), 0x719920);

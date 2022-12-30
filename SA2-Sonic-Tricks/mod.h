@@ -19,6 +19,7 @@ extern Buttons pickButton;
 extern Buttons grabButton;
 extern Buttons petButton;
 extern Buttons gravityButton;
+extern Buttons putButton;
 
 void Init_JumpBall();
 
