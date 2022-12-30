@@ -3,7 +3,7 @@
 extern bool sa1dash;
 extern bool sa1speed;
 extern bool sa1SFX;
-extern bool sonicBall;
+extern bool jumpBall;
 extern bool sonicGrunt;
 extern bool shGrunt;
 extern bool amyGrunt;

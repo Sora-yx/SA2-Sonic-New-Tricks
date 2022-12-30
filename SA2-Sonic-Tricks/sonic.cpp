@@ -45,47 +45,6 @@ void Sonic_Main_r(ObjectMaster* obj)
 	Sonic_Exec_t.Original(obj);
 }
 
-void FixUpgradeDisplay(NJS_CNK_MODEL* a1) {
-	if (isBallForm())
-		return;
-
-	return DrawChunkModel(a1);
-}
-
-static void __declspec(naked) CheckDrawUpgradeModel()
-{
-	__asm
-	{
-		push eax
-		call FixUpgradeDisplay
-		pop eax
-		retn
-	}
-}
-
-void FixUpgradeDisplay2(NJS_OBJECT* a1) {
-	if (isBallForm())
-		return;
-
-	return DrawObject(a1);
-}
-
-static void DoSonTexEffect(ObjectMaster* a1)
-{
-	if (!isBallForm())
-		DoSonicTextureEffectStuff(a1);
-}
-
-static void __declspec(naked) DoSonicTextureEffectStuffASM()
-{
-	__asm
-	{
-		push edi
-		call DoSonTexEffect
-		pop edi
-		retn
-	}
-}
 
 void __cdecl Sonic_runsActions_r(EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* SonicCO2)
 {
@@ -113,29 +72,6 @@ void Init_SonicNewTricks() {
 	if (!sonicGrunt)
 		WriteData<5>((int*)0x71AF97, 0x90);
 
-	if (sonicBall) {
-		//Remove upgrade display when ball form
-		WriteCall((void*)0x72080B, CheckDrawUpgradeModel);
-		WriteCall((void*)0x72086C, CheckDrawUpgradeModel);
-		WriteCall((void*)0x7208F1, CheckDrawUpgradeModel);
-		WriteCall((void*)0x720991, CheckDrawUpgradeModel);
-
-		WriteCall((void*)0x7209E2, FixUpgradeDisplay2);
-		WriteCall((void*)0x720A0C, FixUpgradeDisplay2);
-		WriteCall((void*)0x720A2C, FixUpgradeDisplay2);
-
-		WriteCall((void*)0x720A59, FixUpgradeDisplay2);
-		WriteCall((void*)0x720A7A, FixUpgradeDisplay2);
-
-		//make sonic still spinning while falling with the jump ball
-		SonicAnimList[67] = SonicAnimList[66];
-		SonicAnimList[67].NextAnimation = 68;
-		SonicAnimList[68] = SonicAnimList[66];
-		SonicAnimList[68].NextAnimation = 68;
-
-
-		WriteCall((void*)0x7185b5, DoSonicTextureEffectStuffASM);
-	}
 
 	Sonic_runsActions_t.Hook(Sonic_runsActions_r);
 

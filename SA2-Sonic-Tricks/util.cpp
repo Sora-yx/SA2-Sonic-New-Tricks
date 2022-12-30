@@ -13,6 +13,19 @@ bool isSpeedCharacter() {
 	return false;
 }
 
+bool isSonicOrShadow() {
+	if (SonicCO2PtrExtern) {
+		CharObj2Base* co2 = &SonicCO2PtrExtern->base;
+
+		if (co2)
+		{
+			return SonicCO2PtrExtern->base.CharID2 <= Characters_Shadow;
+		}
+	}
+
+	return false;
+}
+
 bool isBallForm() {
 	if (!isSpeedCharacter())
 		return false;
@@ -32,7 +45,7 @@ bool CheckChara() {
 		CharObj2Base* co2 = &SonicCO2PtrExtern->base;
 
 		if (co2) {
-			if (SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && sonicBall)
+			if (SonicCO2PtrExtern->base.CharID == Characters_Sonic && SonicCO2PtrExtern->base.CharID2 != Characters_Amy && jumpBall)
 				return true;
 		}
 	}

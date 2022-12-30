@@ -14,3 +14,4 @@ bool IsPointInsideSphere(NJS_VECTOR* center, NJS_VECTOR* pos, float radius);
 bool isAmySpinDash();
 bool isSS();
 bool isAttackingKBB();
+bool isSonicOrShadow();

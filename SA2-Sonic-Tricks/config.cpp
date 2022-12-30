@@ -13,7 +13,7 @@ Buttons gravityButton = Buttons_Y;
 bool sa1dash = true;
 bool sa1speed = true;
 bool sa1SFX = true;
-bool sonicBall = true;
+bool jumpBall = true;
 bool shGrunt = true;
 bool sonicGrunt = true;
 bool amyGrunt = false;
@@ -33,11 +33,11 @@ void ReadConfig(const char* path) {
 	const IniFile* config = new IniFile(std::string(path) + "\\config.ini");
 	sa1dash = config->getBool("General", "sa1dash", true);
 	sa1speed = config->getBool("General", "sa1speed", true);
+	jumpBall = config->getBool("General", "jumpBall", true);
 	sa1SFX = config->getBool("General", "sa1SFX", true);
 	superBounce = config->getBool("General", "superBounce", true);
 	SpinDashSomersault = config->getBool("General", "SpinDashSomersault", false);
 
-	sonicBall = config->getBool("Sonic", "sonicBall", true);
 	sonicGrunt = config->getBool("Sonic", "sonicGrunt", true);
 
 	shBounce = config->getBool("Shadow", "shBounce", true);
