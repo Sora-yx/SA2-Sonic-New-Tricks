@@ -226,7 +226,7 @@ void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* da
 		data->Status |= Status_Attack;
 		sonicCO2->SomersaultTime = 0;
 		sonicCO2->SomersaultNextAction = 3;
-		co2->Speed.x = 1.875;
+		co2->Speed.x = 1.875f;
 	}
 	if (CurrentLevel == LevelIDs_GreenHill)
 	{
@@ -508,7 +508,6 @@ static void __declspec(naked) Sonic_SomersaultASM()
 void Init_ActionRemap() {
 	if (LightDashButton != buttons_XB || pickButton != buttons_XB)
 		Sonic_CheckActionWindow_t.Hook(Sonic_CheckActionWindow_r);
-
 
 	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
 		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);

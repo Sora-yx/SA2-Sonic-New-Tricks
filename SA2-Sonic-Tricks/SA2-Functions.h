@@ -116,7 +116,7 @@ static inline void DoPetChao(CharObj2Base* a1, EntityData1* a2)
 	{
 		mov ecx, a2
 		mov eax, a1
-		call DoPetChao
+		call DoPetChaoptr
 	}
 }
 
