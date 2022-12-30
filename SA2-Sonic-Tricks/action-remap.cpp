@@ -3,7 +3,7 @@
 uint8_t actionRemapList[5] = { Action_LightDash, Action_PickUp, Action_GrabObject2, Action_Pet, Action_GravitySwitch };
 
 static UsercallFunc(signed int, Sonic_CheckActionWindow_t, (EntityData1* data1, EntityData2* data2, CharObj2Base* co2, SonicCharObj2* sonicCO2), (data1, data2, co2, sonicCO2), 0x7230E0, rEAX, rEAX, rEDX, rECX, stack4);
-static UsercallFunc(signed int, Sonic_Somersault_t, (SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2), (sonicCO2, data, co2), 0x723880, rEAX, rEAX, stack4, stack4);
+Trampoline* Sonic_Somersault_t = nullptr; //Can't funchook this for some reason
 
 bool isCustomAction(char action)
 {
@@ -114,6 +114,23 @@ static Sint32 __cdecl Sonic_CheckActionWindow_r(EntityData1* data1, EntityData2*
 	return Sonic_CheckActionWindow_t.Original(data1, data2, co2, sonicCO2);
 }
 
+static Sint32 __cdecl Sonic_Somersault_orig(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2)
+{
+	auto target2 = Sonic_Somersault_t->Target();
+
+	Sint32 result;
+	__asm
+	{
+		push[co2]
+		push[data]
+		mov eax, [sonicCO2]
+		call target2
+		add esp, 8
+		mov result, eax
+	}
+	return result;
+}
+
 void SomersaultFinish(CharObj2Base* co2, SonicCharObj2* sonicCO2, EntityData1* data, float getSpd) {
 	if (!isHedgePannel())
 		co2->Speed.x = getSpd;
@@ -162,8 +179,8 @@ void SomersaultFinish2(CharObj2Base* co2, SonicCharObj2* sonicCO2) {
 }
 
 int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2Base* co2, char oldAction, char nextAction, int flagCol) {
+	
 	char pnum = co2->PlayerNum;
-
 	bool isSomersaultPressed = (SomersaultButton != buttons_XB && ((Controllers[pnum].press & SomersaultButton)));
 	bool isSomersaultHeld = (SomersaultButton != buttons_XB && ((Controllers[pnum].on & SomersaultButton)));
 	bool oldInputSomersaultHeld = (SomersaultButton == buttons_XB && Action_Held[pnum]);
@@ -173,7 +190,7 @@ int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2
 	if (flagCol == 1)
 	{
 		if (!isHedgePannel())
-			co2->Speed.x = 0.0;
+			co2->Speed.x = 0.0f;
 	}
 
 	if (Jump_Pressed[pnum])
@@ -194,8 +211,10 @@ int Somersault_ApplyChanges(SonicCharObj2* sonicCO2, EntityData1* data, CharObj2
 }
 
 void ResetSomersault(SonicCharObj2* sonicCO2, CharObj2Base* co2, EntityData1* data) {
+	
 	int curFlag;
 	int charID = co2->CharID2;
+
 	if (co2->PhysData.RunSpeed < (double)co2->Speed.x)
 	{
 		Sonic_DoObstacleSomersault(data, sonicCO2, co2);
@@ -258,9 +277,8 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 
 	if ((status & Status_HoldObject) != 0)
 	{
-		result = 0;
 		sonicCO2->SpindashCounter = 0;
-		return result;
+		return 0;
 	}
 
 	if ((status & (Status_OnObjectColli | Status_Ground)) == 0
@@ -303,38 +321,16 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		}
 		else
 		{
-			co2->Speed.x = 2.5;
+			co2->Speed.x = 2.5f;
 			sonicCO2->SomersaultNextAction = 64;
 			sonicCO2->SomersaultTime = 0;
 			PlayerSomerSaultSoundMaybe(co2);
 		}
 		return 1;
-		break;
 	case Action_MechPunch: //idk
 
-		if (Somersault_ApplyChanges(sonicCO2, data, co2, Action_Somersault2, Action_SomersaultFinish, flagCol))
-			return 1;
+		break;
 
-		if ((co2->AnimInfo.field_C & 2) == 0)
-		{
-			return 0;
-		}
-		if (data->Position.y + 5.0 >= co2->SurfaceInfo.TopSurfaceDist
-			&& (co2->SurfaceInfo.TopSurface & (SurfaceFlag_WaterNoAlpha | SurfaceFlag_Water)) == 0)
-		{
-			SomersaultFinish2(co2, sonicCO2);
-			return 0;
-		}
-		getSomersaultNextAction2 = sonicCO2->SomersaultNextAction;
-		data->Action = getSomersaultNextAction2;
-		if (getSomersaultNextAction2 != Action_Somersault2)
-		{
-			sub_7235C0(co2, data, sonicCO2);
-			return 1;
-		}
-		getSpd = 2.5;
-		SomersaultFinish(co2, sonicCO2, data, getSpd);
-		return 1;
 	case Action_Somersault2:
 		break;
 	case Action_MovingSomersault1:
@@ -346,19 +342,22 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		{
 			return 0;
 		}
+
 		if (sonicCO2->SomersaultTime <= 41
-			|| data->Position.y + 5.0 >= co2->SurfaceInfo.TopSurfaceDist
+			|| data->Position.y + 5.0f >= co2->SurfaceInfo.TopSurfaceDist
 			&& (co2->SurfaceInfo.TopSurface & (SurfaceFlag_WaterNoAlpha | SurfaceFlag_Water)) == 0)
 		{
 			co2->AnimInfo.Next = 96;
 			sonicCO2->SomersaultTime = 40;
 			sonicCO2->SomersaultNextAction = Action_SomersaultFinish;
+
 			if (!isHedgePannel())
-				co2->Speed.x = 1.875;
+				co2->Speed.x = 1.875f;
+
 			PlayerSomerSaultSoundMaybe(co2);
-			result = 0;
-			return result;
+			return 0;
 		}
+
 		getSomersaultNextAction = sonicCO2->SomersaultNextAction;
 		data->Action = getSomersaultNextAction;
 
@@ -375,9 +374,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 			sonicCO2->SomersaultTime = 0;
 			PlayerSomerSaultSoundMaybe(co2);
 		}
-		result = 1;
-
-		return result;
+		return 1;
 	case Action_MovingSomersault2:
 
 		if (Somersault_ApplyChanges(sonicCO2, data, co2, Action_MovingSomersaultFinish, Action_SomersaultFinish, flagCol))
@@ -387,7 +384,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		{
 			return 0;
 		}
-		if (data->Position.y + 5.0 >= co2->SurfaceInfo.TopSurfaceDist
+		if (data->Position.y + 5.0f >= co2->SurfaceInfo.TopSurfaceDist
 			&& (co2->SurfaceInfo.TopSurface & 0x2002) == 0)
 		{
 			SomersaultFinish2(co2, sonicCO2);
@@ -397,7 +394,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		data->Action = SomersaultNextAct;
 		if (SomersaultNextAct == Action_MovingSomersaultFinish)
 		{
-			getSpd = 3.0;
+			getSpd = 3.0f;
 			SomersaultFinish(co2, sonicCO2, data, getSpd);
 			return 1;
 		}
@@ -407,7 +404,6 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 	case Action_MovingSomersaultFinish:
 		break;
 	default:
-
 		if (((SpinDashButton == buttons_XB || SomersaultButton == buttons_XB) && Action_Pressed[pnum])
 			|| isSpinDashPressed || isSomersaultPressed)
 		{
@@ -445,9 +441,9 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 			ResetSomersault(sonicCO2, co2, data);
 			return 1;
 		}
-		if (co2->SurfaceInfo.TopSurfaceDist <= data->Position.y + 5.0
-			&& co2->SurfaceInfo.BottomSurfaceDist >= co2->SurfaceInfo.TopSurfaceDist - 5.0
-			&& co2->DynColInfo->tnorm.y > 0.9900000095367432
+		if (co2->SurfaceInfo.TopSurfaceDist <= data->Position.y + 5.0f
+			&& co2->SurfaceInfo.BottomSurfaceDist >= co2->SurfaceInfo.TopSurfaceDist - 5.0f
+			&& co2->DynColInfo->tnorm.y > 0.9900000095367432f
 			&& (co2->SurfaceInfo.TopSurface & (SurfaceFlag_WaterNoAlpha | SurfaceFlag_Water)) == 0)
 		{
 			ResetSomersault(sonicCO2, co2, data);
@@ -458,11 +454,10 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		{
 			data->Status &= ~Status_Attack;
 		}
-		return 0;
 	}
 
 	// If all those conditions fail, let the original code handle it.
-	return Sonic_Somersault_t.Original(sonicCO2, data, co2);
+	return Sonic_Somersault_orig(sonicCO2, data, co2);
 }
 
 char SpinDash_Held[2];
@@ -495,12 +490,28 @@ void SpinDash_ButtonCheckOnFrames()
 	}
 }
 
+static void __declspec(naked) Sonic_SomersaultASM()
+{
+	__asm
+	{
+		push[esp + 08h] 
+		push[esp + 08h] 
+		push eax 
+		call Sonic_Somersault_r
+		add esp, 4 
+		add esp, 4 
+		add esp, 4 
+		retn
+	}
+}
+
 void Init_ActionRemap() {
 	if (LightDashButton != buttons_XB || pickButton != buttons_XB)
 		Sonic_CheckActionWindow_t.Hook(Sonic_CheckActionWindow_r);
 
+
 	if (SpinDashButton != buttons_XB || SomersaultButton != buttons_XB)
-		Sonic_Somersault_t.Hook(Sonic_Somersault_r);
+		Sonic_Somersault_t = new Trampoline((int)0x723880, (int)0x723885, Sonic_SomersaultASM);
 
 	if (SpinDashButton != buttons_XB) {
 		WriteData((char**)0x725e68, SpinDash_Released);

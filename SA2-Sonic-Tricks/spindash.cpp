@@ -8,6 +8,7 @@ void init_SpinDash() {
 		WriteData<2>((int*)0x723E19, 0x90); //remove spin dash delay
 	}
 
+
 	if (sa1speed) {
 		WriteData((double**)0x725227, SA1dashspeedptr); //increase spin dash speed
 	}
