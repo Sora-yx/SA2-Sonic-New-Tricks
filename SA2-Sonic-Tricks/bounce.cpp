@@ -8,7 +8,7 @@ float* bouncespeed2Ptr = &bounceSpeed2;
 
 signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCharObj2* a3)
 {
-	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
+	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && BlackShieldButton == BounceButton)
 		return 0;
 
 	if ((a1->Upgrades & Upgrades_SonicBounceBracelet) == 0)
@@ -21,9 +21,9 @@ signed int Sonic_CheckBounceAttack_r(CharObj2Base* a1, EntityData1* a2, SonicCha
 	a2->Action = Action_BounceDown;
 	a2->Status |= 0x500u;
 	if (superBounce)
-		a1->Speed.y = -7.0;
+		a1->Speed.y = -7.0f;
 	else
-		a1->Speed.y = -5.0;
+		a1->Speed.y = -5.0f;
 	a3->SomersaultTime = 0;
 	PlaySoundProbably(8202, 0, 0, 0);
 	return 1;
@@ -46,7 +46,7 @@ static void __declspec(naked) Sonic_CheckBounceAttackASM()
 
 signed int Sonic_PerformBounce_r(CharObj2Base* a1, EntityData1* a2)
 {
-	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && !isBlackShield())
+	if (!Action_Pressed[a1->PlayerNum] && BounceButton == buttons_XB || BounceButton != buttons_XB && ((Controllers[a1->PlayerNum].press & BounceButton) == 0) || a1->CharID2 == Characters_MetalSonic && BlackShieldButton == BounceButton)
 		return 0;
 
 	if ((a1->Upgrades & Upgrades_SonicBounceBracelet) == 0)
@@ -58,7 +58,7 @@ signed int Sonic_PerformBounce_r(CharObj2Base* a1, EntityData1* a2)
 	a1->AnimInfo.Next = 30;
 	a2->Status |= Status_Attack | Status_Ball;
 	a2->Action = Action_BounceDown;
-	a1->Speed.y = -7.0;
+	a1->Speed.y = -7.0f;
 	PlaySoundProbably(8202, 0, 0, 0);
 	return 1;
 }

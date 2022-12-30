@@ -62,8 +62,6 @@ void ReadConfig(const char* path) {
 	gravityButton = ButtonsList[config->getInt("ActionRemap", "gravityButton", 2)];
 	BlackShieldButton = ButtonsList[config->getInt("ActionRemap", "shieldButton", 2)];
 
-
-
 	delete config;
 
 	if (sa1SFX)

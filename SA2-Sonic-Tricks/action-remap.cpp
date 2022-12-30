@@ -706,6 +706,11 @@ void Init_ActionRemap() {
 		WriteData((char**)0x71C42D, BlackShield_Held);
 	}
 
+	if (BlackShieldButton != BounceButton) //allow MS to bounce
+	{
+		MetalSonicAnimList[30] = MetalSonicAnimList[66];
+	}
+
 	if (SpinDashButton != buttons_XB) {
 		WriteData((char**)0x725e68, SpinDash_Released);
 		WriteData((char**)0x7251b8, SpinDash_Held);
