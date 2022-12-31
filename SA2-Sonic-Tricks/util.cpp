@@ -14,6 +14,7 @@ bool isSpeedCharacter() {
 }
 
 bool isSonicOrShadow() {
+
 	if (SonicCO2PtrExtern) {
 		CharObj2Base* co2 = &SonicCO2PtrExtern->base;
 

@@ -9,22 +9,34 @@ TaskHook sub_757CD0_t(0x757CD0);
 //fix MS Spin Dash crash
 void __cdecl LightAttackParticle_Render_r(ObjectMaster* a1)
 {
-	if (!isSonicOrShadow())
-	{
-		return;
-	}
+	auto data = a1->Data1.Entity;
 
-	LightAttackParticle_Render_t.Original(a1);
+	if (data)
+	{
+		if (MainCharObj2[data->NextAction])
+		{
+			if (MainCharObj2[data->NextAction]->CharID2 <= Characters_Shadow)
+			{
+				LightAttackParticle_Render_t.Original(a1);
+			}
+		}
+	}
 }
 
 void __cdecl sub_757CD0_r(ObjectMaster* a1)
 {
-	if (!isSonicOrShadow())
-	{
-		return;
-	}
+	auto data = a1->Data1.Entity;
 
-	sub_757CD0_t.Original(a1);
+	if (data)
+	{
+		if (MainCharObj2[data->NextAction])
+		{
+			if (MainCharObj2[data->NextAction]->CharID2 <= Characters_Shadow)
+			{
+				sub_757CD0_t.Original(a1);
+			}
+		}
+	}
 }
 
 void init_SpinDash() {
@@ -37,7 +49,9 @@ void init_SpinDash() {
 		WriteData((double**)0x725227, SA1dashspeedptr); //increase spin dash speed
 	}
 
-	if (allowSpinDashMS)
+	HMODULE dashMod = GetModuleHandle(L"SA2-Amy-Metal-SpinDash");
+
+	if (allowSpinDashMS && !dashMod)
 	{
 		LightAttackParticle_Render_t.Hook(LightAttackParticle_Render_r);
 		sub_757CD0_t.Hook(sub_757CD0_r);
