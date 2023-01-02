@@ -313,6 +313,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 	bool isSpinDashPressed = (SpinDashButton != buttons_XB && ((Controllers[pnum].press & SpinDashButton)));
 	bool isSpinDashHeld = (SpinDashButton != buttons_XB && ((Controllers[pnum].on & SpinDashButton)));
 	bool isSomersaultHeld = (SomersaultButton != buttons_XB && ((Controllers[pnum].on & SomersaultButton)));
+	bool sameDashSomerBtn = (SomersaultButton == SpinDashButton && !sa1dash);
 
 	switch (data->Action)
 	{
@@ -474,8 +475,8 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 				}
 				return result;
 			}
-		}  //else if (sonicCO2->SpindashCounter > 2)
-		else if ((SomersaultButton == buttons_XB && Action_Held[pnum]) || isSomersaultHeld)
+		}  
+		else if ( (sonicCO2->SpindashCounter > 2 && sameDashSomerBtn) || (SomersaultButton == buttons_XB && Action_Held[pnum]) || isSomersaultHeld)
 		{
 			ResetSomersault(sonicCO2, co2, data);
 			return 1;
