@@ -407,7 +407,7 @@ signed int Sonic_Somersault_r(SonicCharObj2* sonicCO2, EntityData1* data, CharOb
 		else
 		{
 			if (!isHedgePannel())
-				co2->Speed.x = 3.125;
+				co2->Speed.x = 3.125f;
 
 			sonicCO2->SomersaultNextAction = Action_SomersaultFinish;
 			sonicCO2->SomersaultTime = 0;
