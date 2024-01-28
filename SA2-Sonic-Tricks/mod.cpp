@@ -2,38 +2,21 @@
 
 HelperFunctions HelperFunctionsGlobal;
 const char* error = "[Sonic New Tricks]: WARNING: Your version of the Mod Loader is old, the mod won't work properly.\nPlease update your Mod Loader for the best experience.";
-const char* error2 = "WARNING: Action Remap is not compatible with Sonic New Tricks.This mod already allow you to change Sonic actions.";
+const char* error2 = "WARNING: Action Remap is not compatible with Sonic New Tricks.\nThis mod already allow you to change Sonic actions.";
+const char* deprecated = "WARNING Sonic New Tricks is deprecated! Please download and install 'SA2 New Tricks Mod' for the best experience.\n\nIf you already have it installed, please uninstall Sonic New Tricks.";
+extern "C" 
+{
 
-extern "C" {
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
-		Sleep(10);
-
-		HMODULE ActionRemap = GetModuleHandle(L"sa2-action-remap");
-
-		if (ActionRemap)
-		{
-			PrintDebug(error2);
-			MessageBoxA(MainWindowHandle, error2, "Sonic New Tricks Mod", MB_ICONWARNING);
-		}
-
-		HelperFunctionsGlobal = helperFunctions;
-
-		if (HelperFunctionsGlobal.Version < 8) {
-			PrintDebug(error);
-			MessageBoxA(MainWindowHandle, error, "Sonic New Tricks Mod", MB_ICONWARNING);
-		}
-
-		ReadConfig(path); //get mod settings by the user
-
-		Init_ObjectsHacks();
-		Init_SonicNewTricks();
-		Init_ActionRemap();
-		Init_JumpBall();
+		PrintDebug(deprecated);
+		MessageBoxA(MainWindowHandle, deprecated, "Sonic New Tricks", MB_ICONWARNING);
+		return;
 	}
 
-	__declspec(dllexport) void __cdecl OnFrame() {
-		Buttons_CheckOnFrames();
+	__declspec(dllexport) void __cdecl OnFrame() 
+	{
+
 	}
 
 	__declspec(dllexport) ModInfo SA2ModInfo = { ModLoaderVer };
